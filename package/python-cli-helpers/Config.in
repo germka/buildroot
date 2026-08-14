@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_CLI_HELPERS
+	bool "python-cli-helpers"
+	select BR2_PACKAGE_PYTHON_CONFIGOBJ # runtime
+	select BR2_PACKAGE_PYTHON_TABULATE # runtime
+	help
+	  Helpers for building command-line apps.
+
+	  https://github.com/dbcli/cli_helpers

@@ -1,0 +1,6 @@
+# md5, sha256 from https://pypi.org/pypi/cli-helpers/json
+md5  2e38b5dcfb2a065ab222accd02a3aae8  cli_helpers-2.7.0.tar.gz
+sha256  62d11710dbebc2fc460003de1215688325d8636859056d688b38419bd4048bc0  cli_helpers-2.7.0.tar.gz
+# Locally computed sha256 checksums
+sha256  cfbf7071b5f828bd3b52219d211e178e2c0bd33b5e2afbcf561b561e4a61c484  LICENSE
+sha256  80342228f24d9c16f86e52352e36bc7fa6b184e65e628361d11dc997e600575d  docs/source/license.rst

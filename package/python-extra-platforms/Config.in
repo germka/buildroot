@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_EXTRA_PLATFORMS
+	bool "python-extra-platforms"
+	select BR2_PACKAGE_PYTHON_DISTRO # runtime
+	help
+	  Detect platforms and group them by family.
+
+	  https://github.com/kdeldycke/extra-platforms

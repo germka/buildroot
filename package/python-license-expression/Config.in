@@ -1,0 +1,9 @@
+config BR2_PACKAGE_PYTHON_LICENSE_EXPRESSION
+	bool "python-license-expression"
+	select BR2_PACKAGE_PYTHON_BOOLEANPY # runtime
+	help
+	  license-expression is a comprehensive utility library to
+	  parse, compare, simplify and normalize license expressions
+	  (such as SPDX license expressions) using boolean logic.
+
+	  https://github.com/aboutcode-org/license-expression

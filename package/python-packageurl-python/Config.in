@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_PACKAGEURL_PYTHON
+	bool "python-packageurl-python"
+	help
+	  A purl aka. Package URL parser and builder.
+
+	  https://github.com/package-url/packageurl-python

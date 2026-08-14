@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/mccabe/json
+md5  374ee2b9407546bb41d195e7436e5f62  mccabe-0.7.0.tar.gz
+sha256  348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325  mccabe-0.7.0.tar.gz
+# Locally computed sha256 checksums
+sha256  10fbc003cbaf8a6b3cf7195b80dac96c86daf390039b2abf6e7b6e735afd7d74  LICENSE

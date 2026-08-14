@@ -1,0 +1,3 @@
+config BR2_PACKAGE_PYTHON_WHEEL_FILENAME
+	bool "python-wheel-filename"
+	help

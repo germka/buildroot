@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_CLICK_LOG
+	bool "python-click-log"
+	select BR2_PACKAGE_PYTHON_CLICK # runtime
+	help
+	  Logging integration for Click.
+
+	  https://github.com/click-contrib/click-log

@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_FLEXCACHE
+	bool "python-flexcache"
+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+	help
+	  Saves and loads to the cache a transformed versions of a
+	  source object.
+
+	  https://github.com/hgrecco/flexcache

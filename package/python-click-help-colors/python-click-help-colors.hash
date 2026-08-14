@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/click-help-colors/json
+md5  bb1fb93a8871cf2800de794e2e34fc06  click-help-colors-0.9.4.tar.gz
+sha256  f4cabe52cf550299b8888f4f2ee4c5f359ac27e33bcfe4d61db47785a5cc936c  click-help-colors-0.9.4.tar.gz
+# Locally computed sha256 checksums
+sha256  c5956a87a5223e7248b7cd061c27348e3d038e9dde425b0be3fb111c794c7721  LICENSE.txt

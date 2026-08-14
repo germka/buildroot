@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/Pint/json
+md5  6d6f14d22cc0339de1b92daf3a2652b6  pint-0.25.2.tar.gz
+sha256  85a45d1da8fe9c9f7477fed8aef59ad2b939af3d6611507e1a9cbdacdcd3450a  pint-0.25.2.tar.gz
+# Locally computed sha256 checksums
+sha256  46e43fb463fe2e0e28b32c900bbbdb6f376959df3936e1c134566860a55b2112  LICENSE

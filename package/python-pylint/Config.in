@@ -1,0 +1,12 @@
+config BR2_PACKAGE_PYTHON_PYLINT
+	bool "python-pylint"
+	select BR2_PACKAGE_PYTHON_ASTROID # runtime
+	select BR2_PACKAGE_PYTHON_COLORAMA # runtime
+	select BR2_PACKAGE_PYTHON_DILL # runtime
+	select BR2_PACKAGE_PYTHON_ISORT # runtime
+	select BR2_PACKAGE_PYTHON_MCCABE # runtime
+	select BR2_PACKAGE_PYTHON_PLATFORMDIRS # runtime
+	select BR2_PACKAGE_PYTHON_TOMLI # runtime
+	select BR2_PACKAGE_PYTHON_TOMLKIT # runtime
+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+	help

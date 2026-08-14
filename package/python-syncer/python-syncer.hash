@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/syncer/json
+md5  4152a113474fc09e2c0bde4894f8b0e7  syncer-2.0.3.tar.gz
+sha256  4340eb54b54368724a78c5c0763824470201804fe9180129daf3635cb500550f  syncer-2.0.3.tar.gz
+# Locally computed sha256 checksums
+sha256  3cd8e3e179aab34ae834c454c9bcb96e11850bf7b04f4b426895d54dd748c730  LICENSE

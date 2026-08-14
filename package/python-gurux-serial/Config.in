@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_GURUX_SERIAL
+	bool "python-gurux-serial"
+	select BR2_PACKAGE_PYTHON_GURUX_COMMON # runtime
+	help
+	  Gurux serial media is used to commmunication with serial
+	  port connections.
+
+	  https://github.com/gurux/gurux.serial.python

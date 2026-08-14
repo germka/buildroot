@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/click-log/json
+md5  5a0b43925fedada552c32cf5263be193  click-log-0.4.0.tar.gz
+sha256  3970f8570ac54491237bcdb3d8ab5e3eef6c057df29f8c3d1151a51a9c23b975  click-log-0.4.0.tar.gz
+# Locally computed sha256 checksums
+sha256  cd55eccfe4c90e57f372446b50292ad550a4bfcc3534af8942fb8ca5c19d423e  LICENSE

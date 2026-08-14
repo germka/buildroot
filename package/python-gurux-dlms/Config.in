@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_GURUX_DLMS
+	bool "python-gurux-dlms"
+	help
+	  Gurux DLMS library for Python.
+
+	  https://github.com/gurux/gurux.dlms.python

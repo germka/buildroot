@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_ISORT
+	bool "python-isort"
+	help
+	  A Python utility / library to sort Python imports.
+
+	  https://pycqa.github.io/isort/index.html

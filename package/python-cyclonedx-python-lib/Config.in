@@ -1,0 +1,11 @@
+config BR2_PACKAGE_PYTHON_CYCLONEDX_PYTHON_LIB
+	bool "python-cyclonedx-python-lib"
+	select BR2_PACKAGE_PYTHON_LICENSE_EXPRESSION # runtime
+	select BR2_PACKAGE_PYTHON_PACKAGEURL_PYTHON # runtime
+	select BR2_PACKAGE_PYTHON_PY_SERIALIZABLE # runtime
+	select BR2_PACKAGE_PYTHON_SORTEDCONTAINERS # runtime
+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+	help
+	  Python library for CycloneDX.
+
+	  https://github.com/CycloneDX/cyclonedx-python-lib/#readme

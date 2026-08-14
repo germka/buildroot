@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_FLEXPARSER
+	bool "python-flexparser"
+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+	help
+	  Parsing made fun ... using typing.
+
+	  https://github.com/hgrecco/flexparser

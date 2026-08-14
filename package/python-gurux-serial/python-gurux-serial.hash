@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/gurux-serial/json
+md5  15365608c613b2ecf4a3f5276a19e1a0  gurux_serial-1.0.21.tar.gz
+sha256  97d55fa062b4d4d4bd65b0d886302754ffe87e4c22caff9f532bf3895d269bc9  gurux_serial-1.0.21.tar.gz
+# Locally computed sha256 checksums
+sha256  4fa9969f58ba3459e32be8dfc9e1bb663b096e73a2dcefe854cf6676046d8418  LICENSE

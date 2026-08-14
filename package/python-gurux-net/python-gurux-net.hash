@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/gurux-net/json
+md5  853f5a0827d62a9ed001609181b676a3  gurux_net-1.0.23.tar.gz
+sha256  623e8ee36749126bcfb23d37554bee4070052fb17de4eee0bb21dcc8c3781ee6  gurux_net-1.0.23.tar.gz
+# Locally computed sha256 checksums
+sha256  4fa9969f58ba3459e32be8dfc9e1bb663b096e73a2dcefe854cf6676046d8418  LICENSE

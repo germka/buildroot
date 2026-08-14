@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_FLASK_UPLOADS
+	bool "python-flask-uploads"
+	select BR2_PACKAGE_PYTHON_FLASK # runtime
+	help
+	  Flexible and efficient upload handling for Flask.
+
+	  https://github.com/maxcountryman/flask-uploads

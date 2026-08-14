@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_PKGINFO
+	bool "python-pkginfo"
+	help
+	  Query metadata from sdists / bdists / installed packages.
+
+	  https://code.launchpad.net/~tseaver/pkginfo/trunk

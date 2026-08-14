@@ -37,6 +37,21 @@ done
 # space. We don't rely on genimage to build the rootfs image, just to insert a
 # pre-built one in the disk image.
 
+# -------------------------------------------------------------------------------------
+STATE_BIN="${BINARIES_DIR}/state.bin"
+echo "Buildroot: Creating empty 1MB partition for dtb barebox-state..."
+dd if=/dev/zero of="${STATE_BIN}" bs=1M count=1 2>/dev/null
+# -------------------------------------------------------------------------------------
+# Создаём директорию с файлами окружения (как они должны быть в barebox)
+echo "Buildroot: Creating ENV partition"
+mkdir -p "${BINARIES_DIR}/env"
+echo "global.autoboot_timeout=3" > "${BINARIES_DIR}/env/config"
+mkdir -p "${BINARIES_DIR}/env/nv"
+echo "state.bootstate" > "${BINARIES_DIR}/env/nv/bootchooser.state_prefix"
+# Упаковываем в образ окружения
+bareboxenv -s -p 0x0 "${BINARIES_DIR}/env" "${BINARIES_DIR}/env.bin"
+# -------------------------------------------------------------------------------------
+
 trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
 ROOTPATH_TMP="$(mktemp -d)"
 

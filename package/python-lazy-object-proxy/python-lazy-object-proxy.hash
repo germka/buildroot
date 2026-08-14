@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/lazy-object-proxy/json
+md5  386c1a466619c1dd674d4245c51d38a1  lazy_object_proxy-1.12.0.tar.gz
+sha256  1f5a462d92fd0cfb82f1fab28b51bfb209fabbe6aabf7f0d51472c0c124c0c61  lazy_object_proxy-1.12.0.tar.gz
+# Locally computed sha256 checksums
+sha256  9fb15c116f76f44830c2c07a84e928baf04fcac12d4c9f57651372dff43fd79e  LICENSE

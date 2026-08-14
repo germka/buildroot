@@ -1,0 +1,13 @@
+#!/bin/sh
+case "$1" in
+  start)
+    echo "Fixing GPT layout and resizing backup header..."
+    # sgdisk -e переносит резервную копию GPT на реальный конец 64ГБ карты
+    if which sgdisk > /dev/null; then
+        sgdisk -e /dev/mmcblk0
+    fi
+    ;;
+  *)
+    exit 1
+    ;;
+esac

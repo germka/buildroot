@@ -1,0 +1,6 @@
+# md5, sha256 from https://pypi.org/pypi/isort/json
+md5  19015ed232ba66d8e05a0598a95ff17e  isort-7.0.0.tar.gz
+sha256  5513527951aadb3ac4292a41a16cbc50dd1642432f5e8c20057d414bdafb4187  isort-7.0.0.tar.gz
+# Locally computed sha256 checksums
+sha256  063294001c3d523dbacbab9dd54ac229982756ccaf592ca53240b2b0cdd82065  LICENSE
+sha256  b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe  isort/_vendored/tomli/LICENSE

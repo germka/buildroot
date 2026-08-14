@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/wheel-filename/json
+md5  0c819ae4be56884f0d1ccd7eceb8b060  wheel_filename-1.4.2.tar.gz
+sha256  87891c465dcbb40b40394a906f01a93214bdd51aa5d25e3a9a59cae62bc298fd  wheel_filename-1.4.2.tar.gz
+# Locally computed sha256 checksums
+sha256  e3c175d88ab0d270dd058e6237a875c1ecd24ff3830e6e850c065bcf5f0240f3  LICENSE

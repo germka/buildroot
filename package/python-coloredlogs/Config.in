@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_COLOREDLOGS
+	bool "python-coloredlogs"
+	select BR2_PACKAGE_PYTHON_HUMANFRIENDLY # runtime
+	help
+	  Colored terminal output for Python's logging module.
+
+	  https://coloredlogs.readthedocs.io

@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/ndg-httpsclient/json
+md5  b0fc8ea38f87d2c1ab1ed79a95c078f9  ndg_httpsclient-0.5.1.tar.gz
+sha256  d72faed0376ab039736c2ba12e30695e2788c4aa569c9c3e3d72131de2592210  ndg_httpsclient-0.5.1.tar.gz
+# Locally computed sha256 checksums
+sha256  7be3995faaf78cebcf2cfcd77dbad990855d7a639243900d2208a824ced29e07  ndg/httpsclient/LICENSE

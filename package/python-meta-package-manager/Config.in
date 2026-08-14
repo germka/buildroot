@@ -1,0 +1,18 @@
+config BR2_PACKAGE_PYTHON_META_PACKAGE_MANAGER
+	bool "python-meta-package-manager"
+	select BR2_PACKAGE_PYTHON_BACKPORTS_STRENUM # runtime
+	select BR2_PACKAGE_PYTHON_BOLTONS # runtime
+	select BR2_PACKAGE_PYTHON_CLICK_EXTRA # runtime
+	select BR2_PACKAGE_PYTHON_CYCLONEDX_PYTHON_LIB # runtime
+	select BR2_PACKAGE_PYTHON_EXTRA_PLATFORMS # runtime
+	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
+	select BR2_PACKAGE_PYTHON_PACKAGEURL_PYTHON # runtime
+	select BR2_PACKAGE_PYTHON_SPDX_TOOLS # runtime
+	select BR2_PACKAGE_PYTHON_TABULATE # runtime
+	select BR2_PACKAGE_PYTHON_TOMLI # runtime
+	select BR2_PACKAGE_PYTHON_TOMLI_W # runtime
+	select BR2_PACKAGE_PYTHON_XMLTODICT # runtime
+	help
+	  🎁 wraps all package managers with a unifying CLI.
+
+	  https://github.com/kdeldycke/meta-package-manager

@@ -1,0 +1,15 @@
+config BR2_PACKAGE_PYTHON_SPDX_TOOLS
+	bool "python-spdx-tools"
+	select BR2_PACKAGE_PYTHON_BEARTYPE # runtime
+	select BR2_PACKAGE_PYTHON_CLICK # runtime
+	select BR2_PACKAGE_PYTHON_LICENSE_EXPRESSION # runtime
+	select BR2_PACKAGE_PYTHON_PLY # runtime
+	select BR2_PACKAGE_PYTHON_PYYAML # runtime
+	select BR2_PACKAGE_PYTHON_RDFLIB # runtime
+	select BR2_PACKAGE_PYTHON_SEMANTIC_VERSION # runtime
+	select BR2_PACKAGE_PYTHON_URITOOLS # runtime
+	select BR2_PACKAGE_PYTHON_XMLTODICT # runtime
+	help
+	  SPDX parser and tools.
+
+	  https://github.com/spdx/tools-python

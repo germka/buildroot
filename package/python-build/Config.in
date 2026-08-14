@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_BUILD
+	bool "python-build"
+	select BR2_PACKAGE_PYTHON_COLORAMA # runtime
+	select BR2_PACKAGE_PYTHON_IMPORTLIB_METADATA # runtime
+	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+	select BR2_PACKAGE_PYTHON_PYPROJECT_HOOKS # runtime
+	select BR2_PACKAGE_PYTHON_TOMLI # runtime
+	help

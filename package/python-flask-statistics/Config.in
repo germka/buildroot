@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_FLASK_STATISTICS
+	bool "python-flask-statistics"
+	select BR2_PACKAGE_PYTHON_FLASK # runtime
+	select BR2_PACKAGE_PYTHON_FLASK_SQLALCHEMY # runtime
+	help
+	  Package to collect statistics in Flask.
+
+	  https://github.com/HealYouDown/flask-statistics

@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_BACKPORTS_STRENUM
+	bool "python-backports-strenum"
+	help
+	  Base class for creating enumerated constants that are also
+	  subclasses of str.
+
+	  https://github.com/clbarnes/backports.strenum

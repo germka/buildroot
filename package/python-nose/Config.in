@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_NOSE
+	bool "python-nose"
+	help
+	  nose extends unittest to make testing easier.
+
+	  http://readthedocs.org/docs/nose/

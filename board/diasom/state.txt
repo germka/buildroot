@@ -1,0 +1,4 @@
+bootstate.system0.remaining_attempts=3
+bootstate.system1.remaining_attempts=3
+bootstate.system0.priority=20
+bootstate.system1.priority=10

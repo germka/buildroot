@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/overrides/json
+md5  a95b152a6d0c14ed9d8b331ca35c2183  overrides-7.7.0.tar.gz
+sha256  55158fa3d93b98cc75299b1e67078ad9003ca27945c76162c1c0766d6f91820a  overrides-7.7.0.tar.gz
+# Locally computed sha256 checksums
+sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE

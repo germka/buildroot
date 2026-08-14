@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_PYREADLINE3
+	bool "python-pyreadline3"
+	help
+	  A python implementation of GNU readline.
+
+	  https://github.com/pyreadline3/pyreadline3

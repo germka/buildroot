@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/pkginfo/json
+md5  021f56d78ec93965b21e98bc3a3ab370  pkginfo-1.12.1.2.tar.gz
+sha256  5cd957824ac36f140260964eba3c6be6442a8359b8c48f4adf90210f33a04b7b  pkginfo-1.12.1.2.tar.gz
+# Locally computed sha256 checksums
+sha256  08ea83077299fd21f6a14a1c9ba90da7d66162b6506d07c4471c4096ad8f1cd8  LICENSE.txt

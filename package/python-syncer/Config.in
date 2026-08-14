@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_SYNCER
+	bool "python-syncer"
+	help
+	  Async to sync converter.
+
+	  https://github.com/miyakogi/syncer

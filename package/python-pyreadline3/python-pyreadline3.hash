@@ -1,0 +1,6 @@
+# md5, sha256 from https://pypi.org/pypi/pyreadline3/json
+md5  395610f91cff4cdc624fb90f0d8c9826  pyreadline3-3.5.4.tar.gz
+sha256  8d57d53039a1c75adba8e50dd3d992b28143480816187ea5efbd5c78e6c885b7  pyreadline3-3.5.4.tar.gz
+# Locally computed sha256 checksums
+sha256  8fc4d8de61b40533023b16e64528d13371a2e9c68677df79ed5e93ba570471bd  LICENSE.md
+sha256  6f6a9ae014dcf9f04752760ea3a3b7816014e417c16d7456ebcee5ecdf4a8532  doc/COPYING

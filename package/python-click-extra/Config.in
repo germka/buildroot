@@ -1,0 +1,16 @@
+config BR2_PACKAGE_PYTHON_CLICK_EXTRA
+	bool "python-click-extra"
+	select BR2_PACKAGE_PYTHON_BOLTONS # runtime
+	select BR2_PACKAGE_PYTHON_CLICK # runtime
+	select BR2_PACKAGE_PYTHON_CLOUP # runtime
+	select BR2_PACKAGE_PYTHON_DEEPMERGE # runtime
+	select BR2_PACKAGE_PYTHON_EXTRA_PLATFORMS # runtime
+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+	select BR2_PACKAGE_PYTHON_TABULATE # runtime
+	select BR2_PACKAGE_PYTHON_TOMLI # runtime
+	select BR2_PACKAGE_PYTHON_WCMATCH # runtime
+	help
+	  🌈 Drop-in replacement for Click to make user-friendly and
+	  colorful CLI.
+
+	  https://github.com/kdeldycke/click-extra

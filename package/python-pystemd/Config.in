@@ -1,0 +1,5 @@
+config BR2_PACKAGE_PYTHON_PYSTEMD
+	bool "python-pystemd"
+	select BR2_PACKAGE_PYTHON_LXML # runtime
+	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
+	help

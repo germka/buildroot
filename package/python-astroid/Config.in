@@ -1,0 +1,4 @@
+config BR2_PACKAGE_PYTHON_ASTROID
+	bool "python-astroid"
+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+	help

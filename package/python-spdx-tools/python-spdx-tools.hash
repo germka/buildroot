@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/spdx-tools/json
+md5  ebbd9ca439294df364a99e4f491fbbe8  spdx-tools-0.8.3.tar.gz
+sha256  68b8f9ce2893b5216bd90b2e63f1c821c2884e4ebc4fd295ebbf1fa8b8a94b93  spdx-tools-0.8.3.tar.gz
+# Locally computed sha256 checksums
+sha256  c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851  LICENSE

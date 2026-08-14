@@ -1,0 +1,13 @@
+config BR2_PACKAGE_PYTHON_PY_LINQ
+	bool "python-py-linq"
+	select BR2_PACKAGE_PYTHON_FUTURE # runtime
+	select BR2_PACKAGE_PYTHON_SIX # runtime
+	help
+	  LINQ (Language Integrated Query) is a popular querying
+	  language available in .NET. This library ports the language
+	  so that developers can query collections of objects using
+	  the same syntax. This library would be useful for Python
+	  developers with experience using the expressiveness and
+	  power of LINQ.
+
+	  https://github.com/viralogic/py-enumerable

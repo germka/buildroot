@@ -29,4 +29,9 @@ install_scripts() {
 install_scripts "usb-upload-boot-ds-rk35*-evb.sh"
 install_scripts "usb-upload-emmc-ds-rk35*-evb.sh"
 
+# # Удаляем блокирующий сервис ожидания сети, чтобы избежать бесконечного сброса консоли getty
+# echo "Buildroot post-build: Removing systemd-networkd-wait-online.service..."
+# rm -f "${TARGET_DIR}/lib/systemd/system/validators.target.wants/systemd-networkd-wait-online.service"
+# rm -f "${TARGET_DIR}/lib/systemd/system/multi-user.target.wants/systemd-networkd-wait-online.service"
+
 exit 0

@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_DULWICH
+	bool "python-dulwich"
+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
+	help
+	  Python Git Library.
+
+	  https://www.dulwich.io/

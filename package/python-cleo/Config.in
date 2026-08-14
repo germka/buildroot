@@ -1,0 +1,9 @@
+config BR2_PACKAGE_PYTHON_CLEO
+	bool "python-cleo"
+	select BR2_PACKAGE_PYTHON_CRASHTEST # runtime
+	select BR2_PACKAGE_PYTHON_RAPIDFUZZ # runtime
+	help
+	  Cleo allows you to create beautiful and testable command-
+	  line interfaces.
+
+	  https://github.com/python-poetry/cleo

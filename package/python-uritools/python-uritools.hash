@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/uritools/json
+md5  28cf165ca4b711b91bcec2d569cb1415  uritools-5.0.0.tar.gz
+sha256  68180cad154062bd5b5d9ffcdd464f8de6934414b25462ae807b00b8df9345de  uritools-5.0.0.tar.gz
+# Locally computed sha256 checksums
+sha256  23c4eff7a1c027a977a0b79c4497e17582c334c5f17ef6ac8ca0b52d1e7d8417  LICENSE

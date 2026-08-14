@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/gurux-dlms/json
+md5  3cbcd962b4ac253c983202f8b7487712  gurux_dlms-1.0.191.tar.gz
+sha256  dd2b8df0d3055d27594f81067e84d92dccde046da70b989dd214f65a97429d9b  gurux_dlms-1.0.191.tar.gz
+# Locally computed sha256 checksums
+sha256  4fa9969f58ba3459e32be8dfc9e1bb663b096e73a2dcefe854cf6676046d8418  LICENSE

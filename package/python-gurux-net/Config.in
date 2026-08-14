@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_GURUX_NET
+	bool "python-gurux-net"
+	select BR2_PACKAGE_PYTHON_GURUX_COMMON # runtime
+	help
+	  Gurux network media is used to commmunication with TCP/IP
+	  or UDP connections.
+
+	  https://github.com/gurux/gurux.net.python

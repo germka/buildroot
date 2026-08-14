@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_OVERRIDES
+	bool "python-overrides"
+	select BR2_PACKAGE_PYTHON_TYPING # runtime
+	help
+	  A decorator to automatically detect mismatch when
+	  overriding a method.
+
+	  https://github.com/mkorpela/overrides

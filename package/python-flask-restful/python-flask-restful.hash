@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/Flask-RESTful/json
+md5  2a1f17e91c526a03bf721e178d8fce94  Flask-RESTful-0.3.10.tar.gz
+sha256  fe4af2ef0027df8f9b4f797aba20c5566801b6ade995ac63b588abf1a59cec37  Flask-RESTful-0.3.10.tar.gz
+# Locally computed sha256 checksums
+sha256  3c58e83b4264e68926b21020322c79f916530b4b054ff1095a90bf0ad41c0b23  LICENSE

@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON_CLICK_HELP_COLORS
+	bool "python-click-help-colors"
+	select BR2_PACKAGE_PYTHON_CLICK # runtime
+	help
+	  Colorization of help messages in Click.
+
+	  https://github.com/click-contrib/click-help-colors

@@ -1,0 +1,9 @@
+config BR2_PACKAGE_PYTHON_HUMANFRIENDLY
+	bool "python-humanfriendly"
+	select BR2_PACKAGE_PYTHON_MONOTONIC # runtime
+	select BR2_PACKAGE_PYTHON_PYREADLINE # runtime
+	select BR2_PACKAGE_PYTHON_PYREADLINE3 # runtime
+	help
+	  Human friendly output for text interfaces using Python.
+
+	  https://humanfriendly.readthedocs.io

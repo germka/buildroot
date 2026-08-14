@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/astroid/json
+md5  c3cd09d560e65c3f59c98f7fee482570  astroid-4.0.2.tar.gz
+sha256  ac8fb7ca1c08eb9afec91ccc23edbd8ac73bb22cbdd7da1d488d9fb8d6579070  astroid-4.0.2.tar.gz
+# Locally computed sha256 checksums
+sha256  fea16bda9e734dea0d9c8d9f5b909878ef4171626354329609fffcf3db42cb24  LICENSE

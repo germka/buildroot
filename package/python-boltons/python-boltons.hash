@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/boltons/json
+md5  fd7a60168e8cda65b4794f0c72437417  boltons-25.0.0.tar.gz
+sha256  e110fbdc30b7b9868cb604e3f71d4722dd8f4dcb4a5ddd06028ba8f1ab0b5ace  boltons-25.0.0.tar.gz
+# Locally computed sha256 checksums
+sha256  c301912653a8d8c99eab6212aa3aea8d164ea249d8ad53c941e0558a0a5ac1e3  LICENSE

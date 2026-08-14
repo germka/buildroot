@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/dill/json
+md5  0a51421ca17dcedddd54e3a2e79f8d29  dill-0.4.0.tar.gz
+sha256  0633f1d2df477324f53a895b02c901fb961bdbf65a17122586ea7019292cbcf0  dill-0.4.0.tar.gz
+# Locally computed sha256 checksums
+sha256  998a48cdbbae6d2acd6f239551a8e4a450e967eb9d8fd8e242c34e9e64e40e26  LICENSE

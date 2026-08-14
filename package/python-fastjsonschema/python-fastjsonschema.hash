@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/fastjsonschema/json
+md5  41294eb5e6b0663644251255cf1770d9  fastjsonschema-2.21.2.tar.gz
+sha256  b1eb43748041c880796cd077f1a07c3d94e93ae84bba5ed36800a33554ae05de  fastjsonschema-2.21.2.tar.gz
+# Locally computed sha256 checksums
+sha256  9ccddf69eb3998a60148debe85b94c5afed53691b6474692e78abcc0a0e544f1  LICENSE

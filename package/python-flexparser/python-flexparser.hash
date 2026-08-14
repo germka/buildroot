@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/flexparser/json
+md5  309b0f4aa7e1e23d6cdea54763abc1cd  flexparser-0.4.tar.gz
+sha256  266d98905595be2ccc5da964fe0a2c3526fbbffdc45b65b3146d75db992ef6b2  flexparser-0.4.tar.gz
+# Locally computed sha256 checksums
+sha256  a276fa944e6becfe51ae313094cb048f7aa6c2e5cc823138e8c1e74f73f79d61  LICENSE

@@ -1,0 +1,29 @@
+config BR2_PACKAGE_PYTHON_POETRY
+	bool "python-poetry"
+	select BR2_PACKAGE_PYTHON_BUILD # runtime
+	select BR2_PACKAGE_PYTHON_CACHECONTROL # runtime
+	select BR2_PACKAGE_PYTHON_CLEO # runtime
+	select BR2_PACKAGE_PYTHON_DULWICH # runtime
+	select BR2_PACKAGE_PYTHON_FASTJSONSCHEMA # runtime
+	select BR2_PACKAGE_PYTHON_FINDPYTHON # runtime
+	select BR2_PACKAGE_PYTHON_IMPORTLIB_METADATA # runtime
+	select BR2_PACKAGE_PYTHON_INSTALLER # runtime
+	select BR2_PACKAGE_PYTHON_KEYRING # runtime
+	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+	select BR2_PACKAGE_PYTHON_PBS_INSTALLER # runtime
+	select BR2_PACKAGE_PYTHON_PKGINFO # runtime
+	select BR2_PACKAGE_PYTHON_PLATFORMDIRS # runtime
+	select BR2_PACKAGE_PYTHON_POETRY_CORE # runtime
+	select BR2_PACKAGE_PYTHON_PYPROJECT_HOOKS # runtime
+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+	select BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT # runtime
+	select BR2_PACKAGE_PYTHON_SHELLINGHAM # runtime
+	select BR2_PACKAGE_PYTHON_TOMLI # runtime
+	select BR2_PACKAGE_PYTHON_TOMLKIT # runtime
+	select BR2_PACKAGE_PYTHON_TROVE_CLASSIFIERS # runtime
+	select BR2_PACKAGE_PYTHON_VIRTUALENV # runtime
+	select BR2_PACKAGE_PYTHON_XATTR # runtime
+	help
+	  Python dependency management and packaging made easy.
+
+	  https://python-poetry.org/

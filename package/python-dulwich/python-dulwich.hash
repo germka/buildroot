@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/dulwich/json
+md5  30c16c5a76bafed8142aca97e283a3f8  dulwich-0.24.10.tar.gz
+sha256  30e028979b6fa7220c913da9c786026611c10746c06496149742602b36a11f6b  dulwich-0.24.10.tar.gz
+# Locally computed sha256 checksums
+sha256  e17db6e0f06d3a70a9a6a6e4e1b85c6dfaa2c7d0154147c798435e333f4b366d  COPYING
