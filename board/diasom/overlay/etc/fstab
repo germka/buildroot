@@ -1,1 +1,3 @@
 /dev/root / auto rw,lazytime 0 1
+# <file system> <mount pt> <type> <options> <dump> <pass>
+/dev/disk/by-partlabel/data /data ext4 defaults,noatime,nofail 0 2

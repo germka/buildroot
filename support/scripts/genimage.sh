@@ -51,6 +51,15 @@ echo "state.bootstate" > "${BINARIES_DIR}/env/nv/bootchooser.state_prefix"
 # Упаковываем в образ окружения
 bareboxenv -s -p 0x0 "${BINARIES_DIR}/env" "${BINARIES_DIR}/env.bin"
 # -------------------------------------------------------------------------------------
+echo "Создание пустого образа data.ext4..."
+DATA_IMG="${BINARIES_DIR}/data.ext4"
+DATA_SIZE_MB=1024
+# Создаём файл нужного размера, заполненный нулями
+dd if=/dev/zero of="${DATA_IMG}" bs=1M count=${DATA_SIZE_MB} status=none
+echo "Форматирование образа data.ext4 в ext4 с меткой 'data'..."
+# Форматируем файл как ext4. Важно использовать метку 'data'
+mkfs.ext4 -L data -F "${DATA_IMG}"
+# -------------------------------------------------------------------------------------
 
 trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
 ROOTPATH_TMP="$(mktemp -d)"
