@@ -1,0 +1,23 @@
+[Unit]
+Description=USPD configurator service
+After=syslog.target network.target nginx.service uspd2-dbprovider.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/taipit/nevav02/uspd2-configurator/lib/python3.7/site-packages/configurator/
+ExecStartPre=+mkdir -p /var/log/taipit
+ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+ExecStart=/opt/taipit/nevav02/uspd2-configurator/bin/python /opt/taipit/nevav02/uspd2-configurator/lib/python3.7/site-packages/configurator/main.py -c /opt/taipit/nevav02/nevav02.conf -n configurator
+
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+RequiredBy=uspd.target

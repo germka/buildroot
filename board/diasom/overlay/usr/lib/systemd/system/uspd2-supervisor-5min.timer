@@ -1,0 +1,23 @@
+# Systemd .timer file template for uspd2-supervisor
+#
+# Start timer:
+#   systemctl start uspd2-slot-registrator-10min@slot1.timer
+#
+# Enable timer to start at boot:
+#   systemctl enable uspd2-slot-registrator-10min@slot1.timer
+#
+# NOTE: %j and %J specifers supports since systemd version 239
+#
+
+
+[Unit]
+Description=Run supervisor event query
+
+[Timer]
+Unit=uspd2-supervisor.service
+OnBootSec=5min
+OnUnitActiveSec=%J
+RandomizedDelaySec=10
+
+[Install]
+WantedBy=timers.target

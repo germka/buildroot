@@ -1,0 +1,27 @@
+# ser2net-verify.service
+[Unit]
+Description=Monitor ser2net state
+
+OnFailure=ser2net-fault.service
+#OnSuccess=
+#Conflicts=
+
+[Service]
+Type=oneshot
+TimeoutSec=0
+
+Environment=SECRET=pGNqdB4K9C2ijOmUD2kPtUhrN
+
+#ExecStartPre=sh -c "exit -1"
+#ExecStart=true
+
+ExecStart=/usr/bin/ser2net-verify --limit=600
+#ExecStopPost=sh -c "/bin/echo EXIT_STATUS=${EXIT_STATUS}; [ \"$EXIT_STATUS\" != \"0\" ] && exit -1 || exit 0"
+#ExecStopPost=sh -c "[ \"$EXIT_STATUS\" != \"0\" ] || /bin/systemctl start .service || /bin/true"
+ExecStopPost=sh -c "[ \"$EXIT_STATUS\" == \"0\" ] && /bin/systemctl stop ser2net-fault.service || /bin/true"
+ExecStartPost=touch -m /var/tmp/ser2net-verify.touch
+
+FailureAction=none
+
+[Install]
+WantedBy=multi-user.target

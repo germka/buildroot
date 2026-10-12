@@ -1,0 +1,21 @@
+[Unit]
+Description=USPD IEC 60870 transport service
+After=syslog.target network.target nginx.service uspd2-dbprovider.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/taipit/nevav02/uspd2-iec104server/lib/python3.7/site-packages/iec104server/
+ExecStart=/opt/taipit/nevav02/uspd2-iec104server/bin/python /opt/taipit/nevav02/uspd2-iec104server/lib/python3.7/site-packages/iec104server/main.py -c /opt/taipit/nevav02/nevav02.conf -n iec104server
+
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+RequiredBy=uspd.target

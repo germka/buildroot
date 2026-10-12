@@ -1,0 +1,22 @@
+[Unit]
+Description=USPD %i module hash checker
+After=network.target nginx.service time-set.target
+PartOf=uspd2-web2soc@.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+User=root
+Group=root
+
+ExecStart=/opt/taipit/nevav02/misc/md5-check.sh uspd2-web2soc
+
+SuccessExitStatus=1 2 3 4 5
+
+StartupCPUWeight=10
+CPUWeight=30
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=uspd.target

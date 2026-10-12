@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer for database rotate service
+
+[Timer]
+OnClockChange=false
+OnTimezoneChange=false
+# OnCalendar=daily
+OnCalendar=hourly
+
+[Install]
+WantedBy=uspd.target

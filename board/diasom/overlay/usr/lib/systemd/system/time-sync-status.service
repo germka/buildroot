@@ -1,0 +1,20 @@
+[Unit]
+Description=Time synchronization status check
+Wants=time-sync-status.target
+Requires=systemd-timesyncd.service ntpd.service gpsd.service
+After=network.target time-sync.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+
+ExecStart=bash -c 'SYNC_STATUS=$$(timedatectl show --property=NTPSynchronized --value); if [[ "$${SYNC_STATUS}" == "yes" ]]; then touch /var/tmp/synchronized; hwclock -w; else systemctl stop time-sync-status.target; rm -f /var/tmp/synchronized; hwclock -s; exit -1; fi'
+ExecStop=/bin/sh /usr/opt/taipit/nevav02/misc/time_sync_offset.sh
+
+TimeoutStartSec=30
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=uspd.target

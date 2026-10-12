@@ -1,0 +1,28 @@
+[Unit]
+Description=LED error handler service
+Conflicts=uspd2-heartbit-monitor.service
+RefuseManualStart=yes
+RefuseManualStop=yes
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStart=sh -c "sleep infinity"
+# Pre
+ExecStartPre=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -vl ACT"
+# Send stop error event
+#ExecStartPre=/opt/taipit/nevav02/misc/uspd_event.sh -c 102
+# Post
+ExecStopPost=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -vrl ACT"
+# Send start error event
+#ExecStopPost=/opt/taipit/nevav02/misc/uspd_event.sh -c 103
+
+Restart=on-failure
+TimeoutStartSec=5
+RestartSec=1
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]

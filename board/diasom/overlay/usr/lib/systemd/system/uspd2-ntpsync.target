@@ -1,0 +1,9 @@
+# /lib/systemd/system/uspd2-ntpsync.target
+
+[Unit]
+Description=NTP syncronization mode target
+Requires=uspd2-ntpsync.service
+#After=uspd2-ntpsync.service
+
+[Install]
+WantedBy=multi-user.target

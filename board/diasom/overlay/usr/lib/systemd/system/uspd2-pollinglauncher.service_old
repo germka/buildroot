@@ -1,0 +1,71 @@
+# Polling slots service unit
+# 2021, Taipit Andrei Petrov <av.petrov@taipit.ru>
+# Licensed under GPL V2
+
+
+[Unit]
+Description=Polling launcher
+
+Requires=network.target nginx.service uspd2-dbprovider.service
+After=network.target
+
+# onboot.service стартует когда dbprovider.service уже вышел в рабочий режим
+Wants=onboot.service
+After=onboot.service
+
+# swclock.target поднимается когда модуль супервизора исправен,
+# что означает, что системное время установлено(?) и является корректным
+Wants=svclock.target
+After=svclock.target
+
+#syslog.target 
+#After=time-sync.target
+#Wants=time-sync.target
+#systemd-time-wait-sync.service
+
+
+[Service]
+# Note that we use Type=notify here since app will send "READY=1" when it's finished starting up
+Type=notify
+#User=uspd
+#Group=uspd
+#PermissionsStartOnly=true
+
+# Note: setting PYTHONUNBUFFERED is necessary to see the output of this service in the journal
+# See https://docs.python.org/2/using/cmdline.html#envvar-PYTHONUNBUFFERED
+Environment=PYTHONUNBUFFERED=true
+Environment=PYTHONPATH=/usr/lib/python3/dist-packages
+Environment=SECRET=pGNqdB4K9C2ijOmUD2kPtUhrN
+
+ExecStartPre=+mkdir -p /var/log/taipit
+#ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+ExecStartPre=+chown -R root:root /var/log/taipit
+#ExecStartPre=/opt/taipit/nevav02/misc/dbprovider-status.sh
+ExecStartPre=/bin/bash -c "kill -9 $$(netstat -lnp | grep 8183 | awk \'{print $$7}\' | cut -d \'/\' -f 1) &>/dev/null || true"
+ExecStartPre=/bin/bash -c "netstat -tlnp 2>/dev/null | grep :8183 && exit -1 || exit 0"
+WorkingDirectory=/opt/taipit/nevav02/pollinglauncher2
+ExecStart=/opt/taipit/nevav02/pollinglauncher2/.venv/bin/python -u -m pollinglauncher2 --config /opt/taipit/nevav02/conf.d/pollinglauncher2.conf
+# --slots slot1
+
+#ExecStop=
+KillMode=mixed
+KillSignal=SIGINT
+#TimeoutStopSec=15
+WatchdogSec=180
+
+Restart=on-failure
+# пауза перед повторным пуском
+RestartSec=120
+# TimeoutStartSec - eсли служба демона не сигнализирует о завершении запуска в течение заданного времени, служба будет считаться сбойной и будет снова закрыта
+TimeoutStartSec=300
+
+StandardOutput=syslog
+StandardError=syslog
+# to use in syslog.conf: `if $programname == '<SyslogIdentifier>' then /path/to/log/file.log`
+SyslogIdentifier=uspd2-pollinglauncher
+SyslogFacility=local6
+
+
+[Install]
+#WantedBy=multi-user.target
+RequiredBy=uspd.target

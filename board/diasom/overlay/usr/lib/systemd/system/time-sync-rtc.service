@@ -1,0 +1,15 @@
+[Unit]
+Description=Time synchronization on hwclock service
+#After=network.target time-sync.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+
+ExecStartPre=/bin/sh -c 'nice -n -20 echo "Current deviation is: $$( sw="$$(date +%%s.%%N)"; hw="$$(date --date="$$(hwclock -f /dev/rtc0)" +%%s.%%N)"; echo "$$sw - $$hw" | bc )"'
+ExecStart=/bin/sh -c '( systemctl is-active time-sync-status.target > /dev/null && echo "System clock sync active" ) || ( echo "Syncing system clock by RTC" && hwclock -s )'
+
+TimeoutStartSec=30
+StandardOutput=syslog
+StandardError=syslog

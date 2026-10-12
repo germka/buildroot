@@ -1,0 +1,9 @@
+[Unit]
+Description=Time synchronization status target
+Requires=time-sync-status.service
+Requires=systemd-timesyncd.service ntpd.service gpsd.service
+After=time-sync-status.service
+PartOf=time-sync-status.service
+
+RefuseManualStart=true
+#RefuseManualStop=true

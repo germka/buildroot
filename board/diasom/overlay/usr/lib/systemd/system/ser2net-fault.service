@@ -1,0 +1,34 @@
+[Unit]
+Description=ser2net-verify error handler service
+
+Wants=ser2net-fault.target
+Conflicts=ser2net.service
+
+#RefuseManualStart=yes
+#RefuseManualStop=yes
+
+[Service]
+Type=simple
+
+# Periodic forced reload. Not a direct feature, but can be imitated if you can change Type=notify (and don't actually notify), and put the timeout to however often you want it to happen
+#Type=notify
+#WatchdogSec=10
+#Restart=always
+
+User=root
+Group=root
+
+#ExecStart=sh -c "sleep infinity"
+ExecStart=/bin/sleep 15
+#ExecStartPre=sh -c "/bin/true"
+
+#OnSuccess=ser2net.service
+ExecStopPost=systemctl start ser2net.service
+
+Restart=on-failure
+TimeoutStartSec=5
+RestartSec=1
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]

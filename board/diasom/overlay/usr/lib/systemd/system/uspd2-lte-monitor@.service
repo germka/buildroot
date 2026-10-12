@@ -1,0 +1,20 @@
+[Unit]
+Description=LTE modem %i monitor service
+StopWhenUnneeded=yes
+RefuseManualStart=yes
+#RefuseManualStop=yes
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStart=bash -c "bash /opt/taipit/nevav02/misc/lte_link_monitor.sh -m %i"
+
+Restart=on-failure
+TimeoutStartSec=15
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]

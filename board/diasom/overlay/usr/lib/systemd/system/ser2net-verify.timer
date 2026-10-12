@@ -1,0 +1,14 @@
+# ser2net-verify.timer
+[Unit]
+Description=Timer for periodic execution of ser2net-verify service
+Requires=ser2net-verify.service
+
+[Timer]
+Unit=ser2net-verify.service
+
+OnBootSec=10min
+OnUnitActiveSec=30min
+RandomizedDelaySec=5
+
+[Install]
+WantedBy=timers.target

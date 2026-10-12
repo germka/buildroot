@@ -1,0 +1,56 @@
+#/lib/systemd/system/uspd2-ascmeclient.service
+
+[Unit]
+Description=ASCME Client Service
+After=network.target nginx.service uspd2-dbprovider.service onboot.service
+
+[Service]
+Type=simple
+#User=uspd
+#Group=uspd
+#PermissionsStartOnly=true
+
+# Note: setting PYTHONUNBUFFERED is necessary to see the output of this service in the journal
+# See https://docs.python.org/2/using/cmdline.html#envvar-PYTHONUNBUFFERED
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/usr/lib/python3/dist-packages
+Environment=USPD_ROOT=/opt/taipit/nevav02
+Environment=USPD_MISC_ROOT=/opt/taipit/nevav02/misc
+Environment=PYTHON_BIN=/opt/taipit/nevav02/ascmeclient/.venv/bin/python
+#Environment=PYTHON_BIN=/usr/bin/python3
+Environment=SECRET=pGNqdB4K9C2ijOmUD2kPtUhrN
+
+# network switch host
+#Environment=REMOTE_ADDR=10.145.226.39
+#Environment=REMOTE_PORT=36040
+
+# local network switch
+Environment=REMOTE_ADDR=127.0.0.1
+Environment=REMOTE_PORT=4070
+
+WorkingDirectory=/opt/taipit/nevav02/ascmeclient
+ExecStartPre=+/bin/mkdir -p /tmp/ascmeclient
+ExecStartPre=+/bin/mkdir -p /var/log/taipit
+#ExecStartPre=+/bin/chmod 755 /var/log/taipit
+#ExecStartPre=-/bin/chmod 666 /var/log/taipit/ascmeclient-error.log
+
+# ожидать выхода dbprovider'а в рабочий режим; сейчас реализовано After=onboot.service
+#ExecStartPre=/opt/taipit/nevav02/misc/dbprovider-status.sh
+
+#ExecStart=/usr/bin/python3 /opt/taipit/nevav02/ascmeclient/app.py --config /opt/taipit/nevav02/nevav02.conf -s 10.145.226.39 -p 36040
+#ExecStart=/opt/taipit/nevav02/ascmeclient/.venv/bin/python /opt/taipit/nevav02/ascmeclient/app.py --config /opt/taipit/nevav02/conf.d/ascmeclient.conf -s ${REMOTE_ADDR} -p ${REMOTE_PORT}
+# remote address in config file
+ExecStart=/opt/taipit/nevav02/ascmeclient/.venv/bin/python /opt/taipit/nevav02/ascmeclient/app.py --config /opt/taipit/nevav02/conf.d/ascmeclient.conf
+
+Restart=on-failure
+RestartSec=20
+TimeoutStartSec=30
+StandardOutput=syslog
+StandardError=syslog
+
+SyslogIdentifier=uspd2-ascmeclient
+
+[Install]
+#WantedBy=multi-user.target
+#WantedBy=uspd.target
+RequiredBy=uspd.target

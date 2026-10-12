@@ -1,0 +1,101 @@
+nav#navigation {
+  position: fixed;
+  width: 225px;
+  height: 100%;
+  background-color: #313443;
+  border-right: 0px solid darkslateblue;
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+  z-index: 5000;
+  margin-top: 60px;
+}
+nav * {
+  padding: 0;
+}
+nav#navigation ul {
+  list-style: none;
+}
+nav#navigation ul li {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 60px;
+  border-bottom: 0px solid darkslateblue;
+}
+nav#navigation ul li.active {
+  background: #2e2e2e;
+}
+nav#navigation ul li.dropdown:hover ul[class*="dropdown-"] {
+  visibility: visible;
+  opacity: 1;
+}
+nav#navigation ul li.dropdown:before {
+  font-family: ionicons;
+  content: "\f125";
+  position: absolute;
+  margin: 20px 0 0 0;
+  left: 85%;
+  color: #aaa;
+}
+nav#navigation ul li:hover:after {
+  width: 225px;
+}
+nav#navigation ul li:after {
+  content: " ";
+  position: absolute;
+  z-index: 1;
+  width: 0px;
+  height: 2px;
+  margin: -2px 0 0 0;
+  background: #126CA1;
+  -webkit-transition: 150ms ease all;
+  -moz-transition: 150ms ease all;
+  transition: 150ms ease all;
+}
+nav#navigation ul li a {
+  display: block;
+  width: 100%;
+  line-height: 60px;
+  padding: 0 15px;
+  text-decoration: none;
+  color: #FFF;
+  -webkit-transition: 150ms ease all;
+  -moz-transition: 150ms ease all;
+  transition: 150ms ease all;
+}
+nav#navigation ul li a:hover {
+  background: lightblue;
+  background-color: #313443;
+  color: #eee;
+}
+nav#navigation ul li a i,
+nav#navigation ul li a span {
+  display: inline-block;
+}
+nav#navigation ul li a i {
+  position: absolute;
+  font-size: 1.6em !important;
+}
+nav#navigation ul li a span {
+  margin: 0 0 0 35px;
+  font-size: 0.85em;
+}
+nav#navigation ul li ul[class*="dropdown-"] {
+  position: absolute;
+  display: block;
+  margin: -61px 0 0 225px;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: 150ms ease all;
+  -moz-transition: 150ms ease all;
+  transition: 150ms ease all;
+  box-shadow: 2px 4px 5px 0 rgba(0,0,0,.14), 3px 1px 10px 0 rgba(0,0,0,.12), 1px 2px 4px -1px rgba(0,0,0,.2);
+}
+nav#navigation ul li ul[class*="dropdown-"] li {
+  width: 225px;
+  background: lightblue;
+  background-color: #313443;
+}
+nav#navigation ul li ul[class*="dropdown-"] li a:hover {
+  background: lightblue;
+  background-color: #313443;
+}

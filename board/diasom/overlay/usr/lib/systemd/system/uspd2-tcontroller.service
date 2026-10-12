@@ -1,0 +1,23 @@
+[Unit]
+Description=USPD transparent mode controller service
+After=syslog.target network.target nginx.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/taipit/nevav02/uspd2-tcontroller/lib/python3.7/site-packages/tcontroller/
+ExecStartPre=+mkdir -p /var/log/taipit
+ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+ExecStart=/opt/taipit/nevav02/uspd2-tcontroller/bin/python /opt/taipit/nevav02/uspd2-tcontroller/lib/python3.7/site-packages/tcontroller/main.py -c /opt/taipit/nevav02/nevav02.conf -n tcontroller
+
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target uspd.target

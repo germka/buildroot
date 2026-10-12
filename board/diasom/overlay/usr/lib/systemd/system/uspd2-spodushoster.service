@@ -1,0 +1,21 @@
+[Unit]
+Description=SPODUS hoster service
+After=network.target nginx.service uspd2-dbprovider.service onboot.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/taipit/nevav02/SpodusHoster/
+#ExecStartPre=/opt/taipit/nevav02/misc/dbprovider-status.sh
+#ExecStart=/opt/taipit/nevav02/SpodusHoster/.venv/bin/python /opt/taipit/nevav02/SpodusHoster/src/app.py -c /opt/taipit/nevav02/SpodusHoster/settings.json
+ExecStart=/opt/taipit/nevav02/SpodusHoster/.venv/bin/python /opt/taipit/nevav02/SpodusHoster/app.py -c /opt/taipit/nevav02/SpodusHoster/settings.json
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=uspd.target

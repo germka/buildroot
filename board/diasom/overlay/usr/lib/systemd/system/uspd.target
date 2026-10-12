@@ -1,0 +1,6 @@
+[Unit]
+Description=USPD core
+After=network-online.target time-sync.target
+
+[Install]
+WantedBy=multi-user.target

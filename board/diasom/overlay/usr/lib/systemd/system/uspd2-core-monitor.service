@@ -1,0 +1,20 @@
+[Unit]
+Description=USPD2 core monitor service
+After=uspd.target
+Requires=uspd.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStart=sh -c "sleep infinity"
+
+Restart=always
+RestartSec=10
+TimeoutStartSec=5
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+RequiredBy=uspd.target

@@ -1,0 +1,7 @@
+# uspd2-server-auth.path
+
+[Path]
+PathModified=/var/log/taipit/uspd2-server-auth.log
+
+[Install]
+WantedBy=multi-user.target

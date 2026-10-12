@@ -1,0 +1,54 @@
+# /lib/systemd/system/uspd2-ntpsync.service
+#
+# Сервис автоматически запускается при пуске ntpd и ожидает, когда тот произведет синхронизацию
+# (при пуске ntpd выставляет статус 'не синхронизировано')
+# Как только синхронизация произведена, записывает в журнал событий запись
+# Файловый флаг NTPSYNC_STATE=/var/tmp/uspd2-ntpsync.state создается перед выполнением команды NTPSYNC_CMD
+# а после ее выполнения удаляется
+#
+# Установка ntpstat
+# wget http://ftp.ru.debian.org/debian/pool/main/n/ntpstat/ntpstat_0.0.0.1-2_armhf.deb && dpkg -i ntpstat_0.0.0.1-2_armhf.deb
+#
+# TODO: записывать величину внесенной поправки
+#
+
+[Unit]
+Description=NTP syncronization mode
+#Requires=ntpd.service
+#After=ntpd.service systemd-timesyncd.service
+#BindsTo=ntpd.service
+#PartOf=ntpd.service
+#PartOf=systemd-timesyncd.service
+After=time-sync.target
+PartOf=time-sync.target
+
+# authomate service - master unit ntpd
+RefuseManualStart=yes
+RefuseManualStop=yes
+
+
+[Service]
+Type=simple
+#RemainAfterExit=yes
+
+Environment='NTPSYNC_STATE=/var/tmp/uspd2-ntpsync/.stamp'
+Environment='NTPSYNC_OFFSET=/var/tmp/uspd2-ntpsync/offset'
+Environment='NTPSYNC_CMD_JRNL=curl -i -s -X GET "http://127.0.0.1:36090/api/v1/configurator/journal/0.0.99.98.13.255?0.0.96.11.7.255=15&time=$(date +\'%%FT%%T\')&0.0.96.8.0.255=$(cat /proc/uptime | awk \'{print $1}\')"'
+Environment='NTPSYNC_CMD_OFFSET=ntpstat | grep "time correct to within" | awk \'{$1=$2=$3=$4="";print $0}\' | sed "s/^ *//" | tee ${NTPSYNC_OFFSET}'
+#Environment=NTPSYNC_CMD/opt/taipit/nevav02/misc/uspd_event.sh -c 101
+ExecStartPre=+/bin/mkdir -p /var/tmp/uspd2-ntpsync
+#ExecStartPre=/bin/sh -c "/bin/true"
+ExecStartPre=/bin/echo WARNING: run service under root permission
+ExecStartPre=/bin/echo ${NTPSYNC_CMD_JRNL}
+ExecStartPre=/bin/echo ${NTPSYNC_CMD_OFFSET}
+#ExecStartPre=/bin/touch -m ${NTPSYNC_STATE}
+ExecStart=sh -c "x=$$(test -f ${NTPSYNC_STATE}); [ -f $${NTPSYNC_STATE} ] && ${NTPSYNC_CMD_JRNL} && rm ${NTPSYNC_STATE} && exit 0 || { timedatectl status | grep -q 'System clock synchronized: no' && /usr/sbin/ntp-wait && echo Synchronized && ${NTPSYNC_CMD_OFFSET} && touch -m ${NTPSYNC_STATE} && ${NTPSYNC_CMD_JRNL} && rm ${NTPSYNC_STATE}; } || { echo Already synchronized; }"
+#ExecStart=sh -c "/bin/sleep infinity"
+
+Restart=on-failure
+RestartSec=20s
+
+[Install]
+#WantedBy=multi-user.target network.target
+#WantedBy=ntpd.service
+#RequiredBy=ntpd.service

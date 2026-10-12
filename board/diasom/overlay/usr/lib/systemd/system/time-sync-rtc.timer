@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer for synchronization on hwclock
+
+[Timer]
+Unit=time-sync-rtc.service
+#OnCalendar=*:0/15
+OnStartupSec=30 min
+OnUnitInactiveSec=30 min
+
+[Install]
+WantedBy=uspd.target

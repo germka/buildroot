@@ -1,0 +1,11 @@
+[Unit]
+Description=USPD2 core monitor service
+#Requires=uspd.target
+
+[Timer]
+#Unit=uspd.target
+OnCalendar=*-*-* *:*:00
+OnUnitInactiveSec=30
+
+[Install]
+WantedBy=uspd.target

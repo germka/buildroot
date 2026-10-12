@@ -1,0 +1,9 @@
+[update]
+compatible=ds-uspd
+version=1.0
+
+[bundle]
+format=verity
+
+[image.rootfs]
+filename=rootfs.ext4

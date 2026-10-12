@@ -1,0 +1,19 @@
+[Unit]
+Description=Database rotate caller
+Requires=systemd-timesyncd.service time-sync-status.target
+After=network.target time-sync.target onboot.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStart=bash -c 'curl -v -X DELETE -H "Content-Type: application/json" -d "{\\"filter\\":{\\"limit\\":10000}}" http://127.0.0.1:36090/api/v1/db/polling94/clean'
+
+
+Restart=on-failure
+TimeoutStartSec=120
+RestartSec=60
+
+StandardOutput=syslog
+StandardError=syslog

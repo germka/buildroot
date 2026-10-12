@@ -1,0 +1,20 @@
+[Unit]
+Description=SPODUS server service
+After=network.target nginx.service uspd2-dbprovider.service onboot.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/taipit/nevav02/SpodusServer
+#ExecStartPre=/opt/taipit/nevav02/misc/led_handler.sh -l SERV -n 3
+ExecStart=/opt/taipit/nevav02/SpodusServer/spodus-server -p 4060 -a "0.0.0.0" -t Verbose -r 5002 -R "127.0.0.1"
+#ExecStopPost=/opt/taipit/nevav02/misc/led_handler.sh -l SERV -r
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=uspd.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Timer for synchronization status service
+
+[Timer]
+Unit=time-sync-status.service
+OnClockChange=true
+OnTimezoneChange=true
+OnCalendar=minutely
+OnUnitInactiveSec=3 min
+OnUnitActiveSec=3 min
+
+[Install]
+WantedBy=uspd.target

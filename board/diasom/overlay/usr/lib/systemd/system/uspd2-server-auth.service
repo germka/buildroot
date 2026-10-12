@@ -1,0 +1,18 @@
+# uspd2-server-auth.service
+
+[Unit]
+Description=server authorization monitor
+After=network.target
+
+[Service]
+Type=oneshot
+
+Environment= \
+    DIAGNOSTIC_SCRIPTS_PATH=/opt/taipit/nevav02/diagnostic/scripts.d \
+    DIAGNOSTIC_SECRET=secret
+
+#ExecStart=/srv/app/scripts/update.sh
+ExecStart=/bin/bash -c "/usr/bin/uspd2-server-auth && /opt/taipit/nevav02/misc/led_handler.sh -l SERV || /opt/taipit/nevav02/misc/led_handler.sh -l SERV -r"
+ExecStartPre=/bin/sleep 1
+
+Restart=no

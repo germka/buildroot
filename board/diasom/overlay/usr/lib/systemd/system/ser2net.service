@@ -1,0 +1,25 @@
+# /lib/systemd/system/ser2net.service
+[Unit]
+Description=Serial to Network Proxy
+Documentation=https://sourceforge.net/projects/ser2net/
+After=network-online.target
+Wants=network-online.target
+Conflicts=ser2net-fault.service
+
+[Service]
+Type=simple
+#User=ser2net
+
+ExecStartPre=+mkdir -p /var/log/taipit
+ExecStartPre=+sh -c '[ ! -p /var/log/taipit/ser2net-pipe ] && mkfifo /var/log/taipit/ser2net-pipe || true'
+ExecStart=/usr/sbin/ser2net -d -c /etc/ser2net.conf
+ExecStartPost=/bin/sh /usr/opt/taipit/nevav02/misc/ser2net_flood_check.sh
+#PIDFile=/run/ser2net/ser2net.pid
+#Restart=no
+#Restart=on-failure
+Restart=always
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=uspd.target

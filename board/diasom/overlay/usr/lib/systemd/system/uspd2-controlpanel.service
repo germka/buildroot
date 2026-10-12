@@ -1,0 +1,23 @@
+[Unit]
+Description=USPD web interface service
+After=syslog.target network.target nginx.service uspd2-configurator.service uspd2-dbprovider.service onboot.service
+
+[Service]
+Type=simple
+User=root
+Group=www-data
+
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=+mkdir -p /var/log/taipit
+ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+WorkingDirectory=/opt/taipit/nevav02/uspd2-controlpanel/lib/python3.7/site-packages/controlpanel/
+ExecStart=/opt/taipit/nevav02/uspd2-controlpanel/bin/gunicorn --access-logfile /var/log/taipit/controlpanel-access.log --error-logfile /var/log/taipit/controlpanel-error.log --timeout 120 --bind unix:/run/controlpanel.sock controlpanel.wsgi:application
+
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target uspd.target

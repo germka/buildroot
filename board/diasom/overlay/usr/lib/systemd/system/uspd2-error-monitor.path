@@ -1,0 +1,11 @@
+[Unit]
+Description=USPD app errors monitor service
+StartLimitIntervalSec=3
+
+[Path]
+#PathModified=/var/log/taipit/critical.log
+PathModified=/run/media/data/taipit/log/critical.log
+#PathChanged=/var/log/taipit/critical.log
+
+[Install]
+WantedBy=uspd.target multi-user.target

@@ -1,0 +1,24 @@
+[Unit]
+Description=web2soc@%I
+After=syslog.target network.target nginx.service uspd2-dbprovider.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+EnvironmentFile=-/usr/opt/taipit/nevav02/conf/web2soc/%I
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/taipit/nevav02/uspd2-web2soc/lib/python3.7/site-packages/web2soc/
+ExecStart=/opt/taipit/nevav02/uspd2-web2soc/bin/python /opt/taipit/nevav02/uspd2-web2soc/lib/python3.7/site-packages/web2soc/main.py --config /opt/taipit/nevav02/nevav02.conf --name %I  $EXT_ARGS
+Nice=5
+
+Restart=on-failure
+TimeoutStartSec=15
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=web2soc
+
+[Install]
+RequiredBy=uspd.target
+DefaultInstance=%p%i

@@ -1,0 +1,10 @@
+[Unit]
+Description=USPD disc activity monitor service
+StartLimitIntervalSec=3
+
+[Path]
+PathModified=/run/media/data/taipit
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=uspd.target

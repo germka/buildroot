@@ -1,0 +1,13 @@
+[Unit]
+Description=USPD LTE monitor service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/taipit/nevav02/misc
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/taipit/nevav02/misc/lte_monitor.sh
+User=root
+Group=root
+
+[Install]
+#WantedBy=uspd.target

@@ -1,0 +1,12 @@
+# ser2net-fault.target
+[Unit]
+Description=ser2net fault semaphore
+#PropagatesReloadTo=ser2net
+
+After=ser2net-fault.service
+PartOf=ser2net-fault.service
+
+RefuseManualStart=true
+RefuseManualStop=true
+
+[Install]

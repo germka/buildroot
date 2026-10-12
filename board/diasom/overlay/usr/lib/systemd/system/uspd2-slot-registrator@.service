@@ -1,0 +1,25 @@
+# Slot registrator unit 
+# 2021, Taipit Andrei Petrov <av.petrov@taipit.ru>
+# Licensed under GPL V2
+
+[Unit]
+Description=Slot devices registrator
+After=uspd2-dbprovider.service
+#Wants=slot-registrator.timer
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/taipit/nevav02/misc
+ExecStart=/usr/bin/flock -xn /var/tmp/uspd2-slot-registrator-%i.lock /usr/bin/uspd2-slot-registrator %i
+Environment=PYTHONUNBUFFERED=1
+Environment=USPD_ROOT=/opt/taipit/nevav02
+Environment=USPD_MISC_ROOT=/opt/taipit/nevav02/misc
+Environment=USPD_GATE_URI=http://127.0.0.1:36090/api/v1
+Environment="PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.7/site-packages"
+Environment=SECRET=pGNqdB4K9C2ijOmUD2kPtUhrN
+SyslogFacility=local0
+User=uspd
+Group=uspd
+
+[Install]
+WantedBy=uspd.target

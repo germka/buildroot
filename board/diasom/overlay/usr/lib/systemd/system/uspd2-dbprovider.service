@@ -1,0 +1,36 @@
+[Unit]
+Description=USPD database access service
+Description=Database API server
+Wants=time-set.target
+After=network.target nginx.service time-set.target
+Before=uspd.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+Environment=PYTHONUNBUFFERED=1
+Environment=FLASK_ENV=development
+Environment=FLASK_DEBUG=1
+Environment=FLASK_APP=main.py
+
+WorkingDirectory=/opt/taipit/nevav02/uspd2-dbprovider/lib/python3.7/site-packages/dbprovider/
+ExecStartPre=+mkdir -p /var/log/taipit
+ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+
+ExecStartPre=+mkdir -p /run/media/data/taipit/dumps_db
+ExecStartPre=+chown -R uspd:uspd /run/media/data/taipit/dumps_db
+
+ExecStart=/opt/taipit/nevav02/uspd2-dbprovider/bin/python /opt/taipit/nevav02/uspd2-dbprovider/lib/python3.7/site-packages/dbprovider/main.py --config /opt/taipit/nevav02/nevav02.conf --name dbprovider -nmdb /run/media/data/taipit/m_collection.db
+
+StartupCPUWeight=1000
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=dbprovider
+
+[Install]
+RequiredBy=uspd.target

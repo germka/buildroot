@@ -1,0 +1,26 @@
+[Unit]
+Description=USPD ZigBee gate service
+After=network.target nginx.service uspd2-configurator.service uspd2-dbprovider.service onboot.service
+Before=uspd.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+Environment=PYTHONUNBUFFERED=1
+
+WorkingDirectory=/opt/taipit/nevav02/uspd2-zigbee/lib/python3.7/site-packages/zigbee/
+ExecStartPre=+mkdir -p /var/log/taipit
+ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+ExecStart=/opt/taipit/nevav02/uspd2-zigbee/bin/python /opt/taipit/nevav02/uspd2-zigbee/lib/python3.7/site-packages/zigbee/_main_.py -c /opt/taipit/nevav02/nevav02.conf -n zigbee
+
+Restart=on-failure
+TimeoutStartSec=45
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=zigbee
+
+[Install]
+RequiredBy=uspd.target

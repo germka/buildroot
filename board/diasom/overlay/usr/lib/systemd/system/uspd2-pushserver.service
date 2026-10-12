@@ -1,0 +1,19 @@
+[Unit]
+Description=SPODUS PUSH listener service
+After=network.target nginx.service uspd2-dbprovider.service onboot.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/opt/taipit/nevav02/pushserver/
+ExecStart=/opt/taipit/nevav02/pushserver/.venv/bin/python /opt/taipit/nevav02/pushserver/main.py -t Info
+Restart=on-failure
+TimeoutStartSec=30
+RestartSec=60
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=uspd.target

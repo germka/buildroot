@@ -1,0 +1,13 @@
+[Unit]
+Description=USPD LTE GPS monitor service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/taipit/nevav02/misc
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/taipit/nevav02/misc/gps_monitor.sh
+User=root
+Group=root
+
+[Install]
+WantedBy=uspd.target

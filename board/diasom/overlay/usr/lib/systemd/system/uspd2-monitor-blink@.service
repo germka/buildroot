@@ -1,0 +1,22 @@
+[Unit]
+Description=LED %I handler service
+StopWhenUnneeded=yes
+RefuseManualStart=yes
+RefuseManualStop=yes
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStart=sh -c "sleep 3"
+ExecStartPre=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -l %I -n 6 -d 150"
+ExecStopPost=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -rl %I"
+
+Restart=on-failure
+TimeoutStartSec=5
+RestartSec=1
+#StandardOutput=syslog
+#StandardError=syslog
+
+[Install]

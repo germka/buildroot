@@ -1,0 +1,12 @@
+[Unit]
+Description=Supervisor journal handler service
+After=uspd2-dbprovider.service uspd2-configurator.service onboot.service
+
+[Service]
+Type=oneshot
+#RemainAfterExit=true
+
+ExecStart=sh -c "curl -s -X POST http://127.0.0.1:36090/api/v1/configurator/supervisor"
+
+[Install]
+WantedBy=multi-user.target

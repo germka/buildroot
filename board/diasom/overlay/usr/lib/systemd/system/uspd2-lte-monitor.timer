@@ -1,0 +1,9 @@
+[Unit]
+Description=USPD2 LTE monitor service
+
+[Timer]
+OnCalendar=*-*-* *:01:00
+#OnUnitInactiveSec=30
+
+[Install]
+WantedBy=uspd.target

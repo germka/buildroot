@@ -1,0 +1,450 @@
+/*----------Common----------*/
+body {
+  background: #FFF;
+  height: 100vh;
+}
+#wrapper {
+  margin: 0 0 0 225px;
+  padding: 15px;
+  padding-top: 75px;
+  color: #666;
+  width: calc(100% - 225px)
+}
+* {
+  font-family: -apple-system,BlinkMacSystemFont,"Ubuntu","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+  font-size: 10pt !important;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.settings-group {
+    background: aliceblue;
+    padding: 5px 5px 15px 5px;
+    margin: 15px 0 15px 0;
+}
+.paginator {
+    margin-top: 1rem !important;
+    margin: auto;
+    width: fit-content;
+    width: max-content;
+}
+.save_button input{
+    margin-right: 5px;
+}
+.info_button a, button{
+    margin-right: 5px;
+}
+
+/*----------Meters list----------*/
+.meters_list {
+    overflow: hidden;
+}
+#meters_list td a{
+    display: block;
+}
+#meters_list caption {
+    caption-side: top;
+    font-weight: 600;
+}
+.meters_submit {
+}
+.delete-row, .add-row {
+    position: relative;
+    left: calc(100% - 135px);
+}
+#log-frame {
+    position: absolute;
+    width: calc(100% - 256px);
+    height: 80%;
+    display: None;
+    z-index: 999;
+}
+.log-data {
+    width: 98%;
+    text-align: left;
+    background-color: #000;
+    color: #ccc;
+    font-size: 12px !important;
+    min-height: 500px;
+    height: 86vh;
+    overflow: auto;
+    padding: 10px;
+    line-height: 16px;
+    margin: 0 auto;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+}
+.log-data span {
+    font-family: Courier New !important;
+    font-size: 10pt !important;
+}
+.log-controls {
+    position: absolute;
+    right: 45px;
+}
+#form-filter {
+    display: none;
+}
+#form-filter form div{
+    margin-right: 0.5rem;
+}
+/*----------Meter Info----------*/
+.meter_head_info {
+    display: inline-block;
+}
+.meter_info_date {
+    float: right;
+    display: inline-block;
+}
+.meter_info_date ul {
+    list-style-type: none;
+}
+.meter_info_date li {
+    text-align: right;
+}
+.type_buttons {
+    position: relative;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+    width: max-content;
+    margin-bottom: 10px;
+}
+.type_buttons a {
+    margin: 2px 5px 2px 5px;
+}
+.meter_info td, .meter_info th {
+  position: relative;
+  outline: 0;
+}
+.meter_info td:hover::after, .meter_info th:hover::after {
+  content: "";
+  position: absolute;
+  background-color: rgba(0,0,0,.075);
+  left: 0;
+  top: -5000px;
+  height: 10000px;
+  width: 100%;
+  z-index: -1;
+}
+.meter_info .polling-date {
+    white-space: nowrap;
+}
+#date_form {
+  float: right;
+}
+.double-normal {
+  color: darkcyan !important;
+}
+.double-error {
+  color: red !important;
+}
+.coeff-error {
+  color: darkred !important;
+}
+/*----------Meters update---------*/
+#meters-update td {
+    vertical-align: middle;
+    padding: 0.1rem;
+}
+#meters-update tr td:last-child, #meters-update tr th:last-child{
+    width: 1%;
+    white-space: nowrap;
+}
+#meters-update .form-container {
+    width: max-content;
+    min-width: 211px;
+    height: min-content;
+}
+#meters-update caption {
+    caption-side: top;
+    font-weight: 600;
+}
+#update-threads caption {
+    caption-side: top;
+    font-weight: 600;
+}
+
+/*----------System log----------*/
+#log-window {
+    width: 98%;
+    text-align: left;
+    background-color: #000;
+    color: #ccc;
+    font-size: 12px !important;
+    min-height: 500px;
+    height: 86vh;
+    overflow: auto;
+    padding: 10px;
+    line-height: 16px;
+    margin: 0 auto;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+}
+#logfile_form #apply-label {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#logfile_form #apply-filter {
+    margin: 0px;
+}
+#logfile_form {
+}
+#stop-button, #start-button {
+    float: left;
+    display: inline-block;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12), 0 1px 2px -1px rgba(0,0,0,.2);
+}
+#reset-button {
+    float: right;
+    display: inline-block;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12), 0 1px 2px -1px rgba(0,0,0,.2);
+    margin-left: 0.5rem;
+}
+#apply-filter {
+    position: relative;
+    top: 2px;
+}
+#filter, #filter-select, #stop-button, #start-button, #history_lines, #auto-scroll, #reset-button {
+    padding: 1px 10px;
+}
+.module, .submit-row {
+    margin-left: 1%;
+    display: inline-block;
+    border: none;
+    min-height: 30px;
+}
+.module div {
+    display: inline-block;
+}
+.form-row {
+    margin-right: 10px;
+}
+.form-row label {
+    margin-left: 10px;
+    display: unset;
+}
+
+@media (max-width: 767px){
+#logfile_form #apply-filter-row {
+    width: 100%;
+    padding: 10px 0px 10px 0px;
+}
+}
+
+/*-----------------login-------------------*/
+
+.login_wrap {
+    position: relative;
+    margin: auto;
+    width: 400px;
+    top: 20%;
+    padding: 20px;
+    border-radius: 2px;
+    background-color: lightblue;
+}
+.login_header {
+    width: fit-content;
+    width: max-content;
+    margin: auto;
+    position: relative;
+}
+.login_bar {
+    margin: auto;
+    margin-top: 50px;
+    position: relative;
+}
+.login_form input {
+    position: absolute;
+    right: 0;
+    font: inherit;
+    border-color: #EEE;
+    border-width: 1pt;
+    border-style: dotted;
+}
+.login_form p {
+    height: 20pt;
+    margin-bottom: 5pt;
+}
+.login_button {
+    left: calc(100% - 52px);
+    top: 10px;
+    position: relative;
+    padding: 2px 5px;
+}
+
+/*-----------------------Header---------------------*/
+
+.header {
+    height: 60px;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+    background-color: white;
+    z-index: 4999;
+}
+.header .logo a {
+    color: #ffffff;
+}
+.header .logo {
+    background-color: #458bbe;
+    width: 225px;
+    position: absolute;
+    text-align: center;
+}
+.header .logo small {
+    font-size: 12px;
+}
+.header .logo span.app-name {
+    font-size: 20px;
+    line-height: 64px;
+    font-weight: 300;
+}
+.header .top-nav {
+    width: 100%;
+    padding-left: 200px;
+    padding-right: 10px;
+}
+.header .top-nav .dropdown {
+    padding-top: 18px;
+    margin-right: 20px;
+    display:inline-block;
+    vertical-align: top;
+}
+.header .top-nav .host-info {
+    margin-left: 50px;
+    display: inline-block;
+    width: unset;
+}
+.header .top-nav .host-info .name span.glyphicon {
+    color: #adadad;
+    line-height: 24px;
+    height: 20px;
+}
+.header .top-nav .host-info .name span.hostname {
+    font-size: 22px;
+    font-weight: 300;
+}
+.header .top-nav .host-info .info {
+    color: #777777;
+    font-size: 12px;
+}
+.header .top-nav .dropdown-text {
+    color: #898989;
+    padding: 10px;
+    font-size: 18px;
+}
+.header .top-nav span.caret {
+    color: #adadad;
+}
+/*----------------Info----------------*/
+.dashboard_params {
+}
+.dashboard_params td {
+    padding: 0 0 0 0.3rem;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.dashboard_params th {
+    padding: 0.3rem;
+}
+.dashboard_params caption {
+    caption-side: top;
+    font-weight: 600;
+}
+.dashboard_subparams caption {
+    caption-side: top;
+    font-weight: 600;
+}
+.dashboard_params tr td:last-child, .dashboard_params tr th:last-child{
+    width: 1%;
+    white-space: nowrap;
+}
+.card-header {
+    min-width: 0pt;
+}
+.card, .collapse {
+    max-width: fit-content;
+    max-width: max-content;
+    display: inline-block;
+}
+#systemd-form input {
+    width: 100%;
+}
+.service_enabled {
+    background-color: lightgreen;
+}
+.card {
+    max-width: unset;
+    max-width: unset;
+}
+@media (max-width: 1920px) and (min-width: 1556px) {
+    .sysinfo {
+        column-count: 2;
+        -moz-column-count: 2;
+    }
+}
+@media (max-width: 1555px) and (min-width: 911px) {
+    .sysinfo {
+        column-count: 1;
+        -moz-column-count: 1;
+    }
+}
+@media (max-width: 910px) {
+    .sysinfo {
+        column-count: 1;
+        -moz-column-count: 1;
+    }
+    nav#navigation>ul>li>a>span, nav#navigation>ul>li:after {
+        display: none !important;
+    }
+    nav#navigation ul li ul[class*="dropdown-"] {
+        margin: -61px 0 0 50px !important;
+    }
+    nav#navigation, .header, .logo {
+        width: 50px !important;
+    }
+    #wrapper {
+        margin: 0 0 0 50px !important;
+        width: calc(100% - 50px) !important;
+    }
+}
+/*---------------System updater--------------*/
+.app-name {
+    width: 25%;
+}
+.pkg-changed-img {
+    float: right;
+    top: 3px;
+    position: relative;
+}
+.app-version {
+    width: 15%;
+    padding: 0!important;
+}
+.app-version select{
+    width: 100%;
+}
+.dist-option {
+    width: fit-content;
+}
+.pkg-option {
+    width: 15%;
+}
+.reset-action {
+    text-decoration: underline dotted;
+    color: darkgray;
+}
+.action-col {
+    width: 1%;
+}
+.action input{
+    display: block;
+}
+.action {
+    min-width: 60px;
+}
+.packages-caption {
+    caption-side: top;
+    font-weight: 600;
+}
