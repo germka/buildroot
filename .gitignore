@@ -14,3 +14,13 @@
 *~
 *.pyc
 .vscode-ctags.next
+#rauc update files
+update-*.raucb
+rauc-bundle/rootfs.ext2
+rauc-bundle/.rauc-workdir*
+/package/*
+
+# temp!
+board/diasom/overlay/opt/taipit/nevav02/*
+board/diasom/overlay/var/www/controlpanel/static/*
+board/diasom/overlay/usr/lib/python3.12/site-packages/*

@@ -1,0 +1,20 @@
+[Unit]
+Description=USPD Supervisor I2C LED handler
+Before=uspd.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStartPre=+sh -c "if [[ ! -e "/tmp/i2c-drv-pipe" ]]; then mkfifo /tmp/i2c-drv-pipe; fi"
+ExecStart=/usr/bin/i2c-drv
+
+Restart=on-failure
+TimeoutStartSec=10
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

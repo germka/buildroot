@@ -9,8 +9,8 @@ Group=www-data
 
 Environment=PYTHONUNBUFFERED=1
 ExecStartPre=+mkdir -p /var/log/taipit
-ExecStartPre=+chown -R uspd:uspd /var/log/taipit
-WorkingDirectory=/opt/taipit/nevav02/uspd2-controlpanel/lib/python3.7/site-packages/controlpanel/
+#ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+WorkingDirectory=/opt/taipit/nevav02/uspd2-controlpanel/lib/python3.12/site-packages/controlpanel/
 ExecStart=/opt/taipit/nevav02/uspd2-controlpanel/bin/gunicorn --access-logfile /var/log/taipit/controlpanel-access.log --error-logfile /var/log/taipit/controlpanel-error.log --timeout 120 --bind unix:/run/controlpanel.sock controlpanel.wsgi:application
 
 Restart=on-failure
