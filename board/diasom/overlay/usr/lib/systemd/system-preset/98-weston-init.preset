@@ -1,2 +1,2 @@
-enable weston.service
-enable weston.socket
+disable weston.service
+disable weston.socket
