@@ -18,8 +18,8 @@ Environment=USPD_GATE_URI=http://127.0.0.1:36090/api/v1
 Environment="PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.7/site-packages"
 Environment=SECRET=pGNqdB4K9C2ijOmUD2kPtUhrN
 SyslogFacility=local0
-User=uspd
-Group=uspd
+#User=uspd
+#Group=uspd
 
 [Install]
 WantedBy=uspd.target

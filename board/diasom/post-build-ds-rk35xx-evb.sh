@@ -29,6 +29,15 @@ install_scripts() {
 install_scripts "usb-upload-boot-ds-rk35*-evb.sh"
 install_scripts "usb-upload-emmc-ds-rk35*-evb.sh"
 
+# GObject-introspection package keep it on the host and doesn't install it to the target
+STAGING_GIREPO="${STAGING_DIR}/usr/lib/girepository-1.0"
+TARGET_GIREPO="${TARGET_DIR}/usr/lib/girepository-1.0"
+
+if [ -d "$STAGING_GIREPO" ]; then
+    mkdir -p "$TARGET_GIREPO"
+    cp -a "$STAGING_GIREPO"/*.typelib "$TARGET_GIREPO"/ 2>/dev/null || true
+fi
+
 # # Удаляем блокирующий сервис ожидания сети, чтобы избежать бесконечного сброса консоли getty
 # echo "Buildroot post-build: Removing systemd-networkd-wait-online.service..."
 # rm -f "${TARGET_DIR}/lib/systemd/system/validators.target.wants/systemd-networkd-wait-online.service"

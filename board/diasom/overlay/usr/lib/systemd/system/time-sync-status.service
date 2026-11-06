@@ -10,11 +10,11 @@ User=root
 Group=root
 
 ExecStart=bash -c 'SYNC_STATUS=$$(timedatectl show --property=NTPSynchronized --value); if [[ "$${SYNC_STATUS}" == "yes" ]]; then touch /var/tmp/synchronized; hwclock -w; else systemctl stop time-sync-status.target; rm -f /var/tmp/synchronized; hwclock -s; exit -1; fi'
-ExecStop=/bin/sh /usr/opt/taipit/nevav02/misc/time_sync_offset.sh
+ExecStop=/bin/sh /opt/taipit/nevav02/misc/time_sync_offset.sh
 
 TimeoutStartSec=30
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=uspd.target

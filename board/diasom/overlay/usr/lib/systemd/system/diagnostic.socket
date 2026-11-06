@@ -1,0 +1,16 @@
+# diagnostic.socket
+[Unit]
+Description=diagnostic socket
+
+[Socket]
+ListenStream=/run/diagnostic.sock
+# Our service won't need permissions for the socket, since it
+# inherits the file descriptor by socket activation
+# only the nginx daemon will need access to the socket
+SocketUser=www-data
+#SocketUser=www
+# Optionally restrict the socket permissions even more.
+# SocketMode=600
+
+[Install]
+WantedBy=sockets.target

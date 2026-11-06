@@ -25,8 +25,8 @@ StartupCPUWeight=1000
 Restart=on-failure
 TimeoutStartSec=30
 RestartSec=60
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=dbprovider
 
 [Install]

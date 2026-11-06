@@ -13,8 +13,8 @@ ExecStart=/usr/bin/i2c-drv
 Restart=on-failure
 TimeoutStartSec=10
 RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

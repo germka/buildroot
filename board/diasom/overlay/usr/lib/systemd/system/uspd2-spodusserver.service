@@ -13,8 +13,8 @@ ExecStart=/opt/taipit/nevav02/SpodusServer/spodus-server -p 4060 -a "0.0.0.0" -t
 Restart=on-failure
 TimeoutStartSec=30
 RestartSec=60
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=uspd.target

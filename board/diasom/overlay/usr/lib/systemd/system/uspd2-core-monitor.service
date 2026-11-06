@@ -13,8 +13,8 @@ ExecStart=sh -c "sleep infinity"
 Restart=always
 RestartSec=10
 TimeoutStartSec=5
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 RequiredBy=uspd.target

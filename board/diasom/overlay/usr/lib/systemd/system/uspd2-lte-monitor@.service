@@ -14,7 +14,7 @@ ExecStart=bash -c "bash /opt/taipit/nevav02/misc/lte_link_monitor.sh -m %i"
 Restart=on-failure
 TimeoutStartSec=15
 RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]

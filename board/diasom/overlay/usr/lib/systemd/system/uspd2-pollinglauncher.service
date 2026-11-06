@@ -58,8 +58,8 @@ RestartSec=120
 # TimeoutStartSec - eсли служба демона не сигнализирует о завершении запуска в течение заданного времени, служба будет считаться сбойной и будет снова закрыта
 TimeoutStartSec=300
 
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 # to use in syslog.conf: `if $programname == '<SyslogIdentifier>' then /path/to/log/file.log`
 SyslogIdentifier=uspd2-pollinglauncher
 SyslogFacility=local6

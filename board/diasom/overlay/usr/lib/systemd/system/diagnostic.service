@@ -1,0 +1,44 @@
+# diagnostic.service
+[Unit]
+Description=diagnostic daemon
+Requires=diagnostic.socket
+After=network.target uspd2-dbprovider.service
+
+[Service]
+Type=notify
+# the specific user that our service will run as
+#User=uspd
+#Group=uspd
+ExecStartPre=/bin/echo WARNING: run service under  root permission
+#запуск с правами рута на время тестирования. В дальнейшем необходимо осуществлять запуск
+#из под пользователя
+
+# another option for an even more restricted service is
+# DynamicUser=yes
+# see http://0pointer.net/blog/dynamic-users-with-systemd.html
+
+Environment=PYTHONUNBUFFERED=true
+#Environment=PYTHONPATH=/usr/lib/python3/dist-packages
+Environment=PYTHONPATH=/opt/taipit/nevav02/diagnostic/.venv/lib/python3.12/site-packages:/usr/lib/python3/dist-packages
+Environment=SECRET=pGNqdB4K9C2ijOmUD2kPtUhrN
+#Environment=DIAGNOSTIC_SCRIPTS_PATH=/opt/taipit/navav02/diagnostic.d
+Environment=DIAGNOSTIC_SCRIPTS_PATH=/opt/taipit/nevav02/diagnostic/scripts.d
+Environment=VENV_PATH=/opt/taipit/nevav02/diagnostic/.venv
+Environment= \
+    DIAGNOSTIC_SECRET=secret \
+    DIAGNOSTIC_VAR1=var1
+#Environment="PATH=/opt/taipit/nevav02/diagnostic/.venv"
+#RuntimeDirectory=gunicorn
+WorkingDirectory=/opt/taipit/nevav02/diagnostic
+ExecStartPre=/bin/echo VENV_PATH$=${VENV_PATH}
+#ExecStart=/usr/bin/gunicorn
+ExecStart=sh -c "${VENV_PATH}/bin/gunicorn --workers 2 --log-level DEBUG --timeout 180 diagnostic.wsgi:app"
+#ExecStart=sh -c "/bin/gunicorn --workers 2 --log-level DEBUG --timeout 180 diagnostic.wsgi:app"
+ExecReload=/bin/kill -s HUP $MAINPID
+
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=false
+
+[Install]
+#WantedBy=uspd.target

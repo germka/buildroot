@@ -1,0 +1,15 @@
+# /lib/systemd/system/onboot.service
+[Unit]
+Description=Action after boot
+After=uspd2-dbprovider.service uspd2-configurator.service
+# run-media-data.mount opt-taipit.mount
+Requires=uspd2-dbprovider.service uspd2-configurator.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+
+ExecStart=/opt/taipit/nevav02/misc/uspd_event.sh -c 101
+
+[Install]
+WantedBy=multi-user.target

@@ -12,8 +12,8 @@ ExecStart=/opt/taipit/nevav02/pushserver/.venv/bin/python /opt/taipit/nevav02/pu
 Restart=on-failure
 TimeoutStartSec=30
 RestartSec=60
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=uspd.target

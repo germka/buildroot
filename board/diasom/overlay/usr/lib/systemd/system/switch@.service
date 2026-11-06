@@ -1,0 +1,12 @@
+[Unit]
+Description=Switch netcat server on port %I
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ncat --broker --listen -p %I
+Restart=on-failure
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target

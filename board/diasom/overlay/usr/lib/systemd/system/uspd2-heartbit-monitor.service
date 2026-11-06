@@ -11,10 +11,11 @@ Type=simple
 User=root
 Group=root
 
-ExecStartPre=sh -c "echo $$(find /sys/class/net/wlan0/phy80211/ -type d -name rfkill* -printf "%%f\n") > /sys/class/leds/supv\:\:led4/trigger"
-ExecStart=sh -c "/opt/taipit/nevav02/misc/led_heartbit.sh"
+# TODO: echo 2=1 > /tmp/i2c-drv-pipe
+# ExecStartPre=sh -c "echo $$(find /sys/class/net/wlan0/phy80211/ -type d -name rfkill* -printf "%%f\n") > /sys/class/leds/supv\:\:led4/trigger"
+
+ExecStart=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -rl ACT"
 ExecStop=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -l ACT"
-#OnFailure=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -l ACT"
 # Send stop error event
 ExecStartPre=/opt/taipit/nevav02/misc/uspd_event.sh -c 103 -w
 # Send start error event
@@ -23,8 +24,8 @@ ExecStopPost=/opt/taipit/nevav02/misc/uspd_event.sh -c 102 -w
 Restart=always
 TimeoutStartSec=10
 RestartSec=10
-#StandardOutput=syslog
-#StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 #RequiredBy=uspd.target

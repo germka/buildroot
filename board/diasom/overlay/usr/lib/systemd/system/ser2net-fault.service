@@ -28,7 +28,7 @@ ExecStopPost=systemctl start ser2net.service
 Restart=on-failure
 TimeoutStartSec=5
 RestartSec=1
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]

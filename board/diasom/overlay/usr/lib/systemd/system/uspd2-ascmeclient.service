@@ -45,8 +45,8 @@ ExecStart=/opt/taipit/nevav02/ascmeclient/.venv/bin/python /opt/taipit/nevav02/a
 Restart=on-failure
 RestartSec=20
 TimeoutStartSec=30
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 SyslogIdentifier=uspd2-ascmeclient
 

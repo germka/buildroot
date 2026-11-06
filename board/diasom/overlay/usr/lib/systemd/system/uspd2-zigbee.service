@@ -12,14 +12,14 @@ Environment=PYTHONUNBUFFERED=1
 
 WorkingDirectory=/opt/taipit/nevav02/uspd2-zigbee/lib/python3.7/site-packages/zigbee/
 ExecStartPre=+mkdir -p /var/log/taipit
-ExecStartPre=+chown -R uspd:uspd /var/log/taipit
+#ExecStartPre=+chown -R uspd:uspd /var/log/taipit
 ExecStart=/opt/taipit/nevav02/uspd2-zigbee/bin/python /opt/taipit/nevav02/uspd2-zigbee/lib/python3.7/site-packages/zigbee/_main_.py -c /opt/taipit/nevav02/nevav02.conf -n zigbee
 
 Restart=on-failure
 TimeoutStartSec=45
 RestartSec=60
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=zigbee
 
 [Install]

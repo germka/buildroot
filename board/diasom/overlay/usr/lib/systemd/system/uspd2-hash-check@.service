@@ -15,8 +15,8 @@ SuccessExitStatus=1 2 3 4 5
 
 StartupCPUWeight=10
 CPUWeight=30
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=uspd.target

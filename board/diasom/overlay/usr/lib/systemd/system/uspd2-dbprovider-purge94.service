@@ -15,5 +15,5 @@ Restart=on-failure
 TimeoutStartSec=120
 RestartSec=60
 
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
