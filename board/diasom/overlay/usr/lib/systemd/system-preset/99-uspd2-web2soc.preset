@@ -1,1 +1,5 @@
-disable uspd2-web2soc@.service
+disable uspd2-web2soc@uspd2-web2soc.service
+enable uspd2-web2soc@.service slot5 slot6
+
+#enable uspd2-web2soc@slot5.service
+#enable uspd2-web2soc@slot6.service
