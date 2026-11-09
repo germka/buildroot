@@ -1,0 +1,11 @@
+[Unit]
+Description=Bind mount NetworkManager leases from /data
+After=data.mount
+RequiresMountsFor=/data
+Before=NetworkManager.service
+
+[Mount]
+What=/data/NetworkManager/leases
+Where=/var/lib/NetworkManager
+Type=none
+Options=bind

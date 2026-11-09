@@ -2,4 +2,5 @@
 # <file system> <mount pt> <type> <options> <dump> <pass>
 /dev/disk/by-partlabel/data /data ext4 defaults,noatime,nofail 0 2
 # nm leases on external partition
-/data/NetworkManager /var/lib/NetworkManager none bind 0 0
+# /data/NetworkManager/leases /var/lib/NetworkManager none bind 0 0
+# /data/NetworkManager/conf /etc/NetworkManager none bind 0 0

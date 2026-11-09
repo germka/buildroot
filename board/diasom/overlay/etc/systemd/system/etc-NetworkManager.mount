@@ -1,0 +1,11 @@
+[Unit]
+Description=OverlayFS for /etc/NetworkManager
+After=data.mount
+RequiresMountsFor=/data
+Before=NetworkManager.service
+
+[Mount]
+What=overlay
+Where=/etc/NetworkManager
+Type=overlay
+Options=lowerdir=/etc/NetworkManager,upperdir=/data/NetworkManager/upper,workdir=/data/NetworkManager/work

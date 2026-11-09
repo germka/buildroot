@@ -38,9 +38,9 @@ if [ -d "$STAGING_GIREPO" ]; then
     cp -a "$STAGING_GIREPO"/*.typelib "$TARGET_GIREPO"/ 2>/dev/null || true
 fi
 
-# # Удаляем блокирующий сервис ожидания сети, чтобы избежать бесконечного сброса консоли getty
-# echo "Buildroot post-build: Removing systemd-networkd-wait-online.service..."
-# rm -f "${TARGET_DIR}/lib/systemd/system/validators.target.wants/systemd-networkd-wait-online.service"
-# rm -f "${TARGET_DIR}/lib/systemd/system/multi-user.target.wants/systemd-networkd-wait-online.service"
+# NetworkManager требует 600 на профилях подключений
+if [ -d "${TARGET_DIR}/etc/NetworkManager/system-connections" ]; then
+    chmod 600 "${TARGET_DIR}/etc/NetworkManager/system-connections/"*.nmconnection 2>/dev/null || true
+fi
 
 exit 0
