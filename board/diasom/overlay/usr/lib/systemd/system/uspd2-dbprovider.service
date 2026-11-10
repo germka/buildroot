@@ -3,6 +3,7 @@ Description=USPD database access service
 Description=Database API server
 Wants=time-set.target
 After=network.target nginx.service time-set.target
+RequiresMountsFor=/opt/taipit/nevav02
 Before=uspd.target
 
 [Service]

@@ -1,6 +1,8 @@
 [Unit]
 Description=USPD core
 After=network-online.target time-sync.target
+Wants=opt-taipit-nevav02.mount
+After=opt-taipit-nevav02.mount
 
 [Install]
 WantedBy=multi-user.target

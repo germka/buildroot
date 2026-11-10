@@ -1,0 +1,10 @@
+[Unit]
+Description=Bind mount config from /data
+RequiresMountsFor=/data
+After=data.mount
+
+[Mount]
+What=overlay
+Where=/opt/taipit/nevav02
+Type=overlay
+Options=lowerdir=/opt/taipit/nevav02,upperdir=/data/taipit/nevav02/upper,workdir=/data/taipit/nevav02/work

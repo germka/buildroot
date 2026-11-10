@@ -1,6 +1,7 @@
 [Unit]
 Description=USPD configurator service
 After=syslog.target network.target nginx.service uspd2-dbprovider.service
+RequiresMountsFor=/opt/taipit/nevav02
 
 [Service]
 Type=simple

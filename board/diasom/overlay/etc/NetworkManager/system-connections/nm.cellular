@@ -1,0 +1,13 @@
+[connection]
+id=cellular
+type=gsm
+
+[gsm]
+number=*99#
+
+[ppp]
+lcp-echo-failure=3
+lcp-echo-interval=5
+
+[ipv6]
+method=auto
