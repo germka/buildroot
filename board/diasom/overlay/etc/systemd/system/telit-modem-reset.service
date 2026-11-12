@@ -1,0 +1,40 @@
+[Unit]
+Description=Reset Telit LE910C1-EU modem and wait for enumeration
+DefaultDependencies=no
+After=local-fs.target sys-subsystem-usb.devices
+Before=ModemManager.service
+Wants=sys-subsystem-usb.devices
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# Таймаут в секундах, сколько ждать появления модема на шине
+Environment=WAIT_TIMEOUT=40
+
+# 1. Сбрасываем модем (скрипт переключает GPIO питания/reset)
+ExecStart=/opt/taipit/nevav02/misc/reset_modem.sh
+
+# 2. Ждём, пока модем снова появится как 1bc7:1252
+ExecStart=/bin/sh -c ' \
+    timeout=${WAIT_TIMEOUT}; \
+    for i in $$(seq 1 $$timeout); do \
+        for dev in /sys/bus/usb/devices/*/idVendor; do \
+            [ -f "$$dev" ] || continue; \
+            if [ "$$(cat $$dev)" = "1bc7" ]; then \
+                d=$$(dirname $$dev); \
+                if [ -f "$$d/idProduct" ] && [ "$$(cat $$d/idProduct)" = "1252" ]; then \
+                    logger -t telit-modem-reset "modem enumerated after $${i}s"; \
+                    exit 0; \
+                fi; \
+            fi; \
+        done; \
+        sleep 1; \
+    done; \
+    logger -t telit-modem-reset "timeout waiting for modem"; \
+    exit 1'
+
+# 3. Даём драйверам (option/cdc_mbim) время привязаться
+ExecStart=/bin/sleep 3
+
+[Install]
+WantedBy=multi-user.target

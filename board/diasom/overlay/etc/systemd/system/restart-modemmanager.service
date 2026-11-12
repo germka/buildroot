@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart ModemManager when modem appears
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl restart ModemManager.service

@@ -1,0 +1,5 @@
+# /etc/NetworkManager/dispatcher.d/50-firewalld-reload
+#!/bin/sh
+if [ "$1" = "wwu1" ] && [ "$2" = "up" ]; then
+    /usr/bin/firewall-cmd --reload
+fi

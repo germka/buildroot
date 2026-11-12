@@ -1,0 +1,2 @@
+# При появлении USB-интерфейса модема Telit LE910C1-EU перезапускаем ModemManager
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1bc7", ATTRS{idProduct}=="1201", TAG+="systemd", ENV{SYSTEMD_WANTS}="restart-modemmanager.service"

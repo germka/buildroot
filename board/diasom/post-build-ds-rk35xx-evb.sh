@@ -43,4 +43,11 @@ if [ -d "${TARGET_DIR}/etc/NetworkManager/system-connections" ]; then
     chmod 600 "${TARGET_DIR}/etc/NetworkManager/system-connections/"*.nmconnection 2>/dev/null || true
 fi
 
+# Установка mbim-proxy в target, если libmbim включён
+if [ -f "${STAGING_DIR}/usr/libexec/mbim-proxy" ]; then
+    mkdir -p "${TARGET_DIR}/usr/libexec"
+    cp -a "${STAGING_DIR}/usr/libexec/mbim-proxy" "${TARGET_DIR}/usr/libexec/"
+    chmod 755 "${TARGET_DIR}/usr/libexec/mbim-proxy"
+fi
+
 exit 0

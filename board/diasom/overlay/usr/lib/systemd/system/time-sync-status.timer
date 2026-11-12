@@ -6,6 +6,7 @@ Unit=time-sync-status.service
 OnClockChange=true
 OnTimezoneChange=true
 OnCalendar=minutely
+OnBootSec=5 min
 OnUnitInactiveSec=3 min
 OnUnitActiveSec=3 min
 
