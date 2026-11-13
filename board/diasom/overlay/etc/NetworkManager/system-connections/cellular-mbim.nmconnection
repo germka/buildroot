@@ -1,0 +1,17 @@
+[connection]
+id=cellular-mbim
+uuid=646b4b45-5fb3-4700-80f6-18a7f8d119f6
+type=gsm
+interface-name=cdc-wdm0
+
+[gsm]
+apn=taipitipmegspb.nw
+
+[ipv4]
+method=auto
+
+[ipv6]
+#addr-gen-mode=default
+method=disabled
+
+[proxy]

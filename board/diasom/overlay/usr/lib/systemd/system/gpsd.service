@@ -1,0 +1,20 @@
+[Unit]
+Description=GPS (Global Positioning System) Daemon
+Requires=gpsd.socket
+# Needed with chrony SOCK refclock
+# ConditionPathExists=/dev/ttyUSB1
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/default/gpsd
+EnvironmentFile=-/etc/sysconfig/gpsd
+ExecStartPre=sh -c "if ! [ -e /dev/ttyUSB1 ]; then sleep 2; exit -1; fi"
+ExecStartPre=sh -c "if ! [ -L /dev/gps0 ]; then ln -s /dev/ttyUSB1 /dev/gps0; fi"
+ExecStartPre=/bin/sleep 15
+ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+Also=gpsd.socket

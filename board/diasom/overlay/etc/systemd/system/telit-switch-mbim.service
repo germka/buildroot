@@ -1,0 +1,15 @@
+[Unit]
+Description=Switch Telit modem to MBIM mode (AT#USBCFG=7)
+After=sys-subsystem-usb.devices telit-modem-reset.service dev-ttyUSB2.device
+BindsTo=dev-ttyUSB2.device
+Before=ModemManager.service
+Wants=sys-subsystem-usb.devices dev-ttyUSB2.device
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c "/usr/bin/minicom -o -D /dev/ttyUSB2 -S /opt/taipit/nevav02/misc/minicom_script || true"
+TimeoutStartSec=30
+
+[Install]
+WantedBy=multi-user.target
