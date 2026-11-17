@@ -1,0 +1,775 @@
+diff --git a/drivers/pps/generators/Kconfig b/drivers/pps/generators/Kconfig
+index b3f340e..346816c 100644
+--- a/drivers/pps/generators/Kconfig
++++ b/drivers/pps/generators/Kconfig
+@@ -31,6 +31,12 @@ config PPS_GENERATOR_PARPORT
+ 	  utilizes STROBE pin of a parallel port to send PPS signals. It uses
+ 	  parport abstraction layer and hrtimers to precisely control the signal.
+ 
++config PPS_GENERATOR_GPIO
++	tristate "GPIO PPS generator"
++	depends on GPIOLIB
++	help
++	  Say Y here to use a GPIO pin as a PPS signal generator.
++
+ config PPS_GENERATOR_TIO
+ 	tristate "TIO PPS signal generator"
+ 	depends on X86 && CPU_SUP_INTEL
+diff --git a/drivers/pps/generators/Makefile b/drivers/pps/generators/Makefile
+index e109920..995a8b2 100644
+--- a/drivers/pps/generators/Makefile
++++ b/drivers/pps/generators/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_PPS_GENERATOR)	:= pps_gen_core.o
+ 
+ obj-$(CONFIG_PPS_GENERATOR_DUMMY)   += pps_gen-dummy.o
+ obj-$(CONFIG_PPS_GENERATOR_PARPORT) += pps_gen_parport.o
++obj-$(CONFIG_PPS_GENERATOR_GPIO)   += pps_gen_gpio.o
+ obj-$(CONFIG_PPS_GENERATOR_TIO)     += pps_gen_tio.o
+ 
+ ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
+diff --git a/drivers/pps/generators/pps_gen_gpio.c b/drivers/pps/generators/pps_gen_gpio.c
+new file mode 120000
+index 0000000..600eb5a
+--- /dev/null
++++ b/drivers/pps/generators/pps_gen_gpio.c
+@@ -0,0 +1 @@
++pps_gen_gpio.v24.c
+\ No newline at end of file
+diff --git a/drivers/pps/generators/pps_gen_gpio.v24.c b/drivers/pps/generators/pps_gen_gpio.v24.c
+new file mode 100644
+index 0000000..9ef1fd1
+--- /dev/null
++++ b/drivers/pps/generators/pps_gen_gpio.v24.c
+@@ -0,0 +1,732 @@
++/*
++ * pps_gen_gpio.c -- kernel GPIO PPS signal generator
++ *
++ * Copyright (C) 2022   Andrei Petrov <av.petrov@taipit.ru>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/platform_device.h>
++#include <linux/time.h>
++#include <linux/gpio.h>
++#include <linux/of_gpio.h>
++#include <linux/jiffies.h>
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/math64.h>		// 64-bit division functions
++#include <linux/hrtimer.h>
++#include <linux/ktime.h>
++#include <linux/kprobes.h>
++#include <linux/random.h>
++#include <linux/version.h>
++#include <linux/workqueue.h>
++#include <linux/sched.h>
++#include <linux/interrupt.h>
++
++
++#define DRVDESC				"GPIO PPS signal generator"
++#define DRV_LOG_PREFIX			"pps_gen_gpio: "
++#define PPS_GEN_GPIO_VERSION		"2.4.0"
++#define PPS_GEN_GPIO_BUILD		50
++#define HRTIMER_NANOSLEEP_ADDR		0x80178ef4
++//#define	DEV_ATTR_ENABLED
++#define AUX_TIMEOUT			1*HZ		/* base PPS frequency */
++#define NSEC_PER_JIFFIE			10000000	/* nanosec in one jiffie (= jiffies_to_nsecs(1)) - в различных системах отлична, поэтому стоит проверка на соответствие при старте */
++#define USEC_PER_JIFFIE			10000
++#define PPS_GEN_ADJ_MAX_US		20000		/* максимально возможная поправка за одну итерацию */
++
++
++static struct workqueue_struct *pps_gen_gpio_wq;	// queue
++//static struct delayed_work pps_gen_gpio_dwq;		// task
++
++/**
++ * support none-exported kernel function hrtimer_nanosleep()
++ */
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++typedef long (*hrtimer_nanosleep_pointer_t)(const struct timespec64 *rqtp, const enum hrtimer_mode mode, const clockid_t clockid);
++static hrtimer_nanosleep_pointer_t hrtimer_nanosleep_p = HRTIMER_NANOSLEEP_ADDR;		// see /proc/kallsyms
++#else
++typedef long (*hrtimer_nanosleep_t)(ktime_t rqtp, const enum hrtimer_mode mode, const clockid_t clockid);
++static hrtimer_nanosleep_t hrtimer_nanosleep_p;
++#endif
++
++/* The values are boolean, zero for low, nonzero for high.
++ https://www.kernel.org/doc/Documentation/gpio/gpio-legacy.txt
++*/
++enum pps_gen_gpio_level {
++	PPS_GPIO_LOW = 0,
++	PPS_GPIO_HIGH = 1
++};
++
++/**
++ * own driver data structure
++ */
++struct pps_gen_gpio_devdata
++{
++    void *_nodata;
++    struct delayed_work work;				/* queue task */
++    struct gpio_desc *pps_gpio;				/* GPIO port descriptor */
++
++    struct timespec64 ts_at_start_measurement;		/* системное время в момент старта */
++    bool measurement_started;				/* флаг "измерение стартовало" */
++    long cadj;						/* постоянная поправка */
++    long cadj0;						/* для контроля изменения cadj */
++    long adj;						/* поправка расчетная (автоматически расчитываемая) */
++    unsigned long adj_add;				/* время прецезионной "доводки" в рамках N jiffie */
++    struct timespec64 ts_at_pps_front;			/* системное время в момент формирования фронта импульса */
++
++    unsigned long count;				/* (stat) Подсчет секунд отработанных сигналом PPS */
++    unsigned long restart;
++    long error_us;					/* значение ошибки относительно хода системных часов */
++    long accuracy_us;					/* точность выполнения прыжка */
++    unsigned long test_sleep_accuracy_max;
++};
++
++
++void worker_func(struct work_struct *work);
++void init_hrtimer_nanosleep_ptr(void);
++static void sleep(u64 delay_usec);
++static long get_sectick_distance(struct timespec64 *ts);
++
++static void test_sleep(struct pps_gen_gpio_devdata* devdata);
++static void pps_gen_start_measurement(struct pps_gen_gpio_devdata *devdata, struct timespec64 *ts);
++static unsigned long get_seconds_since_measurement(struct pps_gen_gpio_devdata *devdata);
++static void pps_gen_make_impulse(struct pps_gen_gpio_devdata *devdata);
++static void pps_gen_stop_impulse(struct pps_gen_gpio_devdata *devdata);
++static signed long pps_gen_split_adj(struct pps_gen_gpio_devdata *devdata);
++
++static long get_sectick_error(struct timespec64 *ts, struct pps_gen_gpio_devdata *devdata);
++
++/**
++ * IMPLEMENTATION SECTION
++ */
++
++/**
++ * Основная рабочая функция
++ */
++void worker_func(struct work_struct *work)
++{
++    struct timespec64 ts_0, ts_1;
++    unsigned long specified_adj_us, resulting_adj_us, dt_add_us;
++    long error0_us;
++
++    struct pps_gen_gpio_devdata *devdata = container_of(to_delayed_work(work), struct pps_gen_gpio_devdata, work);
++
++
++    /* сбор первичных данных о совершенном "прыжке" */
++    {
++        ktime_get_real_ts64(&ts_0);
++        specified_adj_us = 1000000 + devdata->cadj + devdata->adj;	// заданная величина прыжка
++        resulting_adj_us = 0;		// длина реально совершенного прыжка
++        if (devdata->measurement_started)
++        {
++            struct timespec64 dts = timespec64_sub(ts_0, devdata->ts_at_pps_front);
++            resulting_adj_us = dts.tv_sec * 1000000 + dts.tv_nsec /1000;
++        }
++
++        dt_add_us = 0;			// длительность докрутки
++        if (specified_adj_us > resulting_adj_us)
++        dt_add_us = specified_adj_us - resulting_adj_us;
++    }
++
++    /*
++     * Additional precesion sleep
++     *
++     * докрутка до целевого значения "прыжка"
++     *
++     */
++#if 0
++    {
++        s64 tadd0_us = ktime_to_us(ktime_get_real());
++        while(true
++            && ktime_to_us(ktime_get_real()) - tadd0_us < dt_add_us
++        ){
++            sleep(100);
++        }
++    }
++#else
++    sleep(dt_add_us);
++#endif
++
++    /**
++     * прыжок совершен в полном объеме
++     */
++    ktime_get_real_ts64(&ts_1);
++    //--------------------------------------------------------------------------------
++
++    /* сбор итоговых данных о совершенном "прыжке" */
++    {
++        struct timespec64 dts = timespec64_sub(ts_1, devdata->ts_at_pps_front);
++        resulting_adj_us = dts.tv_sec * 1000000 + dts.tv_nsec /1000;
++        devdata->accuracy_us = specified_adj_us - resulting_adj_us;		// точность (смещение результата относительно заданного значения)
++    }
++
++    if (!devdata->measurement_started)
++    {
++        /* перезапуск measurement */
++        struct timespec64 ts;
++        ktime_get_real_ts64(&ts);
++        pps_gen_start_measurement(devdata, &ts);
++    }
++
++    /**
++     * make impulse
++     */
++    {
++        pps_gen_make_impulse(devdata);
++    }
++    /**
++     * отрисовка фронта закончена
++     * критическая секция закончилась
++     */
++    //--------------------------------------------------------------------------------
++
++    /* ошибка pulse относительно системного tick'а */
++    {
++        error0_us = devdata->error_us;
++        devdata->error_us = 0;
++        if (devdata->measurement_started)
++        {
++            devdata->error_us = get_sectick_error(&ts_1, devdata) /1000;
++        }
++    }
++
++#ifndef NO_AUTO_COMPENSATION
++    /**
++     * Компенсация ошибки
++     *
++     * Осуществляется в пределах [-adj_max .. +adj_max], us
++     *
++     */
++    if (devdata->error_us != 0)
++    {
++        /* компенсируем ошибку */
++        const long adj_max = PPS_GEN_ADJ_MAX_US;
++
++        devdata->adj = devdata->error_us;
++        if (devdata->adj > adj_max) devdata->adj = adj_max;
++        if (devdata->adj < -adj_max) devdata->adj = -adj_max;
++        // итоговая поправка cadj+adj
++    }
++#else 
++    devdata->adj = 0;	//TODO: FIXED_ADJ
++#endif
++
++    /**
++     * Планирование следующего вызова рабочей функции
++     */
++    signed long total_adj_j = pps_gen_split_adj(devdata);
++    queue_delayed_work(pps_gen_gpio_wq, &devdata->work, 0
++        + AUX_TIMEOUT		// постоянная смещения 1Гц: msecs_to_jiffies(1000)
++        + total_adj_j		// итоговая расчетная поправка: учитывает cadj + adj
++     );
++
++
++    //--------------------------------------------------------------------------------
++#if 0
++    test_sleep(devdata);
++#endif
++
++    {
++        /* информация по прыжку */
++        pr_info(DRV_LOG_PREFIX "jump specified: %luus (add %lu); resulting: %luus (add %lu); accure %+ldus; error=%+ld(%+ld)us",
++            specified_adj_us, devdata->adj_add,			// заданная величина прыжка (из нее add - часть запланированная для точной докрутки)
++            resulting_adj_us, dt_add_us,			// длина реально совершенного прыжка (из нее add - длительность точной докрутки)
++            devdata->accuracy_us,				// точность совершенного прыжка
++            devdata->error_us, devdata->error_us - error0_us	// ошибка относительно хода системных часов
++        );
++    }
++
++    if (devdata->cadj != devdata->cadj0)
++    {
++        devdata->cadj0 = devdata->cadj;
++        pr_info(DRV_LOG_PREFIX "cadj=%+ldus\n", devdata->cadj);
++    }
++
++
++    {
++        sleep(100);
++        pps_gen_stop_impulse(devdata);
++    }
++
++}
++
++
++/**
++ * Тестирование sleep()
++ */
++static void test_sleep(struct pps_gen_gpio_devdata* devdata)
++{
++    int delay[] = {1, 5, 10, 20, 50, 99, 100, 200, 999, 1000, 5000, 100, 100, 100, 100, 100, 100, 100};
++    int i;
++    for (i=0; i<sizeof(delay)/sizeof(int); i++)
++    {
++        struct timespec64 ts0, ts1;
++        ktime_get_real_ts64(&ts0);
++        sleep(delay[i]);
++        ktime_get_real_ts64(&ts1);
++        struct timespec64 dts = timespec64_sub(ts1, ts0);
++        unsigned long accuracy = dts.tv_nsec /1000 - delay[i];
++        if (devdata->test_sleep_accuracy_max < accuracy)
++            devdata->test_sleep_accuracy_max = accuracy;
++        pr_info(DRV_LOG_PREFIX "sleep %dus => %luus\n", delay[i], dts.tv_nsec /1000);
++    }
++    pr_info(DRV_LOG_PREFIX "accuracy_max=%luus\n", devdata->test_sleep_accuracy_max);
++}
++
++/**
++ * формирование начала импульса
++ *
++ * в случае если секундный тик на допустимом расстоянии 75ms,
++ * происходит ожидание
++ */
++static void pps_gen_make_impulse(struct pps_gen_gpio_devdata *devdata){
++	struct timespec64 tsi;
++	unsigned long j0;
++
++
++	gpiod_set_value(devdata->pps_gpio, PPS_GPIO_HIGH);
++#if 0
++	mod_timer(&devdata->timer_2, 0
++	    + jiffies
++	    + nsecs_to_jiffies(GPIO_PULSE_WIDTH_MIN_NS)
++	);
++#endif
++
++	ktime_get_real_ts64(&devdata->ts_at_pps_front);
++	devdata->count += 1;
++}
++
++/**
++ * формирование окончания импульса
++ *
++ * фиксированная длинна отмеряется относительно метки devdata->ts_at_pps_front
++*/
++static void pps_gen_stop_impulse(struct pps_gen_gpio_devdata *devdata){
++	unsigned long ja;
++	s64 si;
++	struct timespec64 tsi;
++	bool f_tick;
++	unsigned long j0;
++	struct timespec64 *ts0;
++
++#ifdef DEBUG
++	if (devdata->verbose > 10)
++		pr_info(DRV_LOG_PREFIX "%s %s[%d] stop %luimpulse", __BASE_FILE__, __func__, __LINE__, devdata->count);
++#endif
++
++#if 0
++	j0 = jiffies;
++	ts0 = &devdata->ts_at_pps_front;
++	do {
++		ktime_get_real_ts64(&tsi);
++		ja = 0;
++		if (tsi.tv_sec >= ts0->tv_sec)
++			ja += (tsi.tv_sec - ts0->tv_sec) * NSEC_PER_SEC;
++		else
++			break;
++		if (tsi.tv_nsec >= ts0->tv_nsec)
++			ja += tsi.tv_nsec - ts0->tv_nsec;
++		else if (ja > 0)
++			ja -= ts0->tv_nsec - tsi.tv_nsec;
++		else
++			break;
++		f_tick = si != tsi.tv_sec;
++		si = tsi.tv_sec;
++		// ----------
++
++
++
++	}while(true
++	    && ja > 0 && ja < NSEC_PER_JIFFIE * 2	// длина сигнала
++	    && jiffies < j0 + 2				// предохранительн
++	);
++#endif
++
++	gpiod_set_value(devdata->pps_gpio, PPS_GPIO_LOW);
++}
++
++
++/**
++ * Фиксация начала процесса измерения точности хода часов
++ */
++static void pps_gen_start_measurement(struct pps_gen_gpio_devdata *devdata, struct timespec64 *ts){
++    //ktime_get_real_ts64(&devdata->ts_at_start_measurement);
++    devdata->ts_at_start_measurement.tv_sec = ts->tv_sec;
++    devdata->ts_at_start_measurement.tv_nsec = ts->tv_nsec;
++    devdata->count = 0;		// pps count
++    devdata->restart += 1;	// количество перезапусков
++    devdata->adj = 0;
++    //devdata->сadj = devdata->сadj;	// постоянная поправки неизменна
++    devdata->cadj0 = 0;
++    devdata->measurement_started = true;
++
++    pr_info(DRV_LOG_PREFIX "start measurement %lu at %lld.%09ld\n", devdata->restart, (s64)devdata->ts_at_start_measurement.tv_sec, devdata->ts_at_start_measurement.tv_nsec);
++}
++
++/**
++ * поправку разбиваем на jiffie-часть и докручиваемую часть adj_add[us]
++ * 
++ * докручиваемая часть должна быть достаточной, чтобы нивелировать 
++ * запаздывание вызова в случае загрузки цпу и прочих возможных
++ * ситуаций
++ *
++ * http://gitlab.taipit.local/uspd/embedded/purple/-/issues/17#note_14545
++ *
++ */
++static signed long pps_gen_split_adj(struct pps_gen_gpio_devdata *devdata)
++{
++	long adj_j;	// value in jiffies
++	const int safety_period = 10;
++	long adj = devdata->cadj + devdata->adj;
++
++	if (devdata->adj > 0)
++	{
++		// devdata->cadj - value in us
++		//cadj_j = usecs_to_jiffies(devdata->cadj); cadj_j-=1;
++		    // unsigned long nsecs_to_jiffies(u64 n);
++		    // округляет в большую сторону
++		adj_j = adj / USEC_PER_JIFFIE;
++		devdata->adj_add = adj % USEC_PER_JIFFIE;
++	}
++	else
++	{
++		//cadj_j = usecs_to_jiffies(devdata->cadj * -1) * -1;
++		adj_j = adj / USEC_PER_JIFFIE - 1;
++		devdata->adj_add = USEC_PER_JIFFIE + adj % USEC_PER_JIFFIE;
++	}
++
++	{
++		adj_j -= safety_period;
++		devdata->adj_add += safety_period * USEC_PER_JIFFIE;
++	}
++
++	return adj_j;
++}
++
++
++/**
++ * Количество секундных тиков с начала измерения (расчитывается)
++ */
++static unsigned long get_seconds_since_measurement(struct pps_gen_gpio_devdata *devdata)
++{
++	struct timespec64 ts;
++	ktime_get_real_ts64(&ts);
++	if (ts.tv_sec < devdata->ts_at_start_measurement.tv_sec)
++	{
++		/* error: были переведены часы */
++		return 0;	// TODO:
++	}
++	return ts.tv_sec - devdata->ts_at_start_measurement.tv_sec;
++}
++
++/**
++ * Get cumulative error
++ *
++ * return long, ns - разница между ходом секунд и пульсовым генератором
++ */
++static long get_sectick_error(struct timespec64 *ts, struct pps_gen_gpio_devdata *devdata)
++{
++    long d1 = 0;
++    long d1_s, l1;
++
++    d1 = get_sectick_distance(ts);
++    d1_s = (devdata->count - get_seconds_since_measurement(devdata)) * NSEC_PER_SEC;
++    if (d1 < 0) l1 = 1; else l1 = 0;
++    d1_s += l1 * NSEC_PER_SEC;
++
++    return d1_s + d1;
++}
++
++#if LINUX_VERSION_CODE > KERNEL_VERSION(5,7,7)
++#include <linux/kprobes.h>
++typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
++static void *resolve_symbol(const char *name)
++{
++    struct kprobe kp = {
++        .symbol_name = "kallsyms_lookup_name",
++    };
++    unsigned long addr;
++    kallsyms_lookup_name_t lookup;
++    int ret;
++
++    ret = register_kprobe(&kp);
++    if (ret < 0) {
++        pr_err("register_kprobe failed: %d\n", ret);
++        return NULL;
++    }
++
++    lookup = (kallsyms_lookup_name_t)kp.addr;
++    unregister_kprobe(&kp);
++
++    if (!lookup) {
++        pr_err("kallsyms_lookup_name not found\n");
++        return NULL;
++    }
++
++    addr = lookup(name);
++    if (!addr) {
++        pr_err("symbol '%s' not found\n", name);
++        return NULL;
++    }
++
++    return (void *)addr;
++}
++#endif
++
++/**
++ * Получение адреса неэкспортируемой функции hrtimer_nanosleep()
++ */
++void init_hrtimer_nanosleep_ptr(void)
++{
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++    // only for kernel less then 5.7.7 (https://lore.kernel.org/lkml/20200221114404.14641-1-will@kernel.org/)
++    // otherwise use kprobe-method see (https://nskernel.gitbook.io/kernel-play-guide/accessing-the-non-exported-in-modules)
++    hrtimer_nanosleep_p = (void *)kallsyms_lookup_name("hrtimer_nanosleep");
++#else
++    hrtimer_nanosleep_p = resolve_symbol("hrtimer_nanosleep");
++#endif
++    pr_info(DRV_LOG_PREFIX "hrtimer_nanosleep address: %px\n", hrtimer_nanosleep_p);
++}
++
++/**
++ * Misc funtions
++ */
++
++/**
++  * Sleep in usec
++  */
++static void sleep(u64 delay_usec)
++{
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++    struct timespec64 ts = {
++        .tv_nsec = delay_usec * NSEC_PER_USEC,
++    };
++#if 0
++    hrtimer_nanosleep(&ts, HRTIMER_MODE_REL, CLOCK_MONOTONIC);
++    //ERROR: "hrtimer_nanosleep" [.../0.1-r0/pps_gen_gpio.ko] undefined!
++    //функция в ядре неэкспортируемая
++#else
++    (* hrtimer_nanosleep_p)(&ts, HRTIMER_MODE_REL, CLOCK_MONOTONIC);
++#endif
++
++#else
++    ktime_t rqtp = ns_to_ktime(delay_usec);
++    hrtimer_nanosleep_p(rqtp, HRTIMER_MODE_REL, CLOCK_MONOTONIC);
++#endif
++}
++
++/**
++ * Get distance seconds tick
++ *
++ * Отставание/опережение относительно близжайшего секундного тика
++ *
++ * return long , ns - фактический перелет/недолет;  -500ms <= d <= 500ms;
++ *  d < 0 - запаздывание вызова пульса от тика системной секунды;
++ *  d > 0 - вызов пульса раньше времени; cекундный тик еще не произошел
++ */
++static long get_sectick_distance(struct timespec64 *ts)
++{
++	long d1;
++
++	d1 = ts->tv_nsec - NSEC_PER_SEC/2;
++	if (d1 > 0) d1 = NSEC_PER_SEC/2 - d1;
++	if (d1 < 0) d1 = -NSEC_PER_SEC/2 - d1;
++	return d1;
++}
++
++/**
++ * DRIVER API SECTION
++ */
++
++/**
++ * The compatible property here defined is searched for in the DT
++ */
++static const struct of_device_id pps_gen_gpio_dt_ids[] = {
++        { .compatible = "pps-gen-gpio", },
++        { /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, pps_gen_gpio_dt_ids);
++
++/**
++ * Device sysfs attributes
++ */
++static ssize_t pps_gen_gpio_count_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++    struct pps_gen_gpio_devdata *devdata = dev_get_drvdata(dev);
++    int len;
++
++    len = sprintf(buf, "%lu\n", devdata->count);
++    if (len <= 0)
++        dev_err(dev, "mydrv: Invalid sprintf len: %d\n", len);
++    return len;
++}
++static DEVICE_ATTR(pps_count, S_IRUGO, pps_gen_gpio_count_show, NULL);
++
++static ssize_t pps_gen_gpio_restart_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct pps_gen_gpio_devdata *devdata = dev_get_drvdata(dev);
++	int len;
++
++	len = sprintf(buf, "%lu\n", devdata->restart);
++	if (len <= 0)
++		dev_err(dev, "mydrv: Invalid sprintf len: %d\n", len);
++	return len;
++}
++static DEVICE_ATTR(restart, S_IRUGO, pps_gen_gpio_restart_show, NULL);
++
++
++static struct attribute *pps_gen_gpio_attrs[] = {
++    &dev_attr_pps_count.attr,
++    &dev_attr_restart.attr,
++    NULL
++};
++ATTRIBUTE_GROUPS(pps_gen_gpio);
++
++
++
++static int pps_gen_gpio_probe(struct platform_device *pdev)
++{
++    int ret;
++    struct device *dev = &pdev->dev;
++    struct pps_gen_gpio_devdata *devdata;
++    pr_info(DRV_LOG_PREFIX "probe\n");
++
++    /* Allocate space for device info. */
++    devdata = devm_kzalloc(dev, sizeof(struct pps_gen_gpio_devdata), GFP_KERNEL);
++    if (!devdata) {
++        dev_err(dev, "Can't allocate memory space\n");
++            ret = -ENOMEM;
++            goto err_alloc;
++    }
++
++    /* There should be a single PPS generator GPIO pin defined in DT. */
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++    if (of_gpio_named_count(dev->of_node, "pps-gen-gpio") != 1) {
++#else
++    if (gpiod_count(dev, "pps-gen-gpio") != 1) {
++#endif
++        dev_err(dev, "There should be exactly one pps-gen GPIO defined in DT\n");
++        return -EINVAL;
++    }
++
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++    devdata->pps_gpio = devm_gpiod_get(dev, "pps-gen", GPIOD_OUT_LOW);
++    if (IS_ERR(devdata->pps_gpio)) {
++        ret = PTR_ERR(devdata->pps_gpio);
++        dev_err(dev, "Cannot get PPS GPIO [%d]\n", ret);
++        goto err_gpio_get;
++    }
++#else
++	devdata->pps_gpio = devm_gpiod_get(dev, "pps-gen-gpio", GPIOD_OUT_LOW);
++	if (IS_ERR(devdata->pps_gpio)) {
++	    dev_err(dev, "failed to get pps-gen-gpio: %ld\n", PTR_ERR(devdata->pps_gpio));
++	    return PTR_ERR(devdata->pps_gpio);
++	}
++#endif
++
++#ifdef DEV_ATTR_ENABLED
++    ret = sysfs_create_group(&pdev->dev.kobj, &pps_gen_gpio_group);
++    if (ret) {
++        dev_err(&pdev->dev, "sysfs creation failed\n");
++        return ret;
++    }
++#endif
++
++    {
++        pps_gen_gpio_wq = create_workqueue("pps-gen-gpio-wq");
++        if (!pps_gen_gpio_wq) {
++            printk(KERN_ERR DRV_LOG_PREFIX "No memory for workqueue\n");
++            return 1;
++        }
++        printk(KERN_INFO DRV_LOG_PREFIX "Create Workqueue successful!\n");
++
++        INIT_DELAYED_WORK(&devdata->work, worker_func);
++        queue_delayed_work(pps_gen_gpio_wq, &devdata->work, msecs_to_jiffies(1000));
++    }
++
++    platform_set_drvdata(pdev, devdata);
++    pr_info(DRV_LOG_PREFIX "probe complete\n");
++
++    return 0;
++
++err_gpio_dir:
++    devm_gpiod_put(dev, devdata->pps_gpio);
++err_gpio_get:
++err_dt:
++    devm_kfree(dev, devdata);
++
++err_alloc:
++    return ret;
++}
++
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++static int pps_gen_gpio_remove(struct platform_device *pdev)
++#else
++static void pps_gen_gpio_remove(struct platform_device *pdev)
++#endif
++{
++    struct device *dev = &pdev->dev;
++    struct pps_gen_gpio_devdata *devdata = platform_get_drvdata(pdev);
++
++    devm_gpiod_put(dev, devdata->pps_gpio);
++
++    {
++        cancel_delayed_work(&devdata->work);
++        flush_workqueue(pps_gen_gpio_wq); /* ждать пока отработает таймер */
++        destroy_workqueue(pps_gen_gpio_wq);
++    }
++
++#ifdef DEV_ATTR_ENABLED
++    sysfs_remove_group(&pdev->dev.kobj, &pps_gen_gpio_group);
++#endif
++#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,7,7)
++    return 0;
++#endif
++}
++
++static struct platform_driver pps_gen_gpio_driver = {
++    .driver = {
++        .name           = "pps_gen_gpio",
++        .owner          = THIS_MODULE,
++        .of_match_table = of_match_ptr(pps_gen_gpio_dt_ids),
++        .dev_groups = pps_gen_gpio_groups,
++    },
++    .probe              = pps_gen_gpio_probe,
++    .remove             = pps_gen_gpio_remove,
++};
++
++
++static int __init pps_gen_gpio_init(void)
++{
++    pr_info(DRVDESC " v%s-build%d\n", PPS_GEN_GPIO_VERSION, PPS_GEN_GPIO_BUILD);
++    pr_info(DRV_LOG_PREFIX "init\n");
++
++    init_hrtimer_nanosleep_ptr();
++
++    platform_driver_register(&pps_gen_gpio_driver);
++    return 0;
++}
++
++static void __exit pps_gen_gpio_exit(void)
++{
++    printk(KERN_INFO DRV_LOG_PREFIX "exit\n");
++
++    platform_driver_unregister(&pps_gen_gpio_driver);
++}
++
++module_init(pps_gen_gpio_init);
++module_exit(pps_gen_gpio_exit);
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Andrei Petrov <av.petrov@taipit.ru>");
++MODULE_VERSION(PPS_GEN_GPIO_VERSION);

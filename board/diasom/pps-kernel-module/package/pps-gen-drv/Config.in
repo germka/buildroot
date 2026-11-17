@@ -1,0 +1,5 @@
+config BR2_PACKAGE_PPS_GEN_DRV
+    bool "pps-gen-drv"
+    depends on BR2_LINUX_KERNEL
+    help
+      Custom PPS generator kernel module (pps-gen-gpio).
