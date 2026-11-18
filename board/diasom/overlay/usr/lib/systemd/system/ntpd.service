@@ -16,7 +16,7 @@ Restart=on-failure
 RestartSec=30
 PIDFile=/run/ntpd.pid
 ExecStartPre=/bin/sh -c 'systemctl is-active gpsd.service 1>/dev/null && echo "GPS daemon started" || ( echo "Waiting for GPS daemon" && exit -1 )'
-ExecStart=/usr/sbin/ntpd -g -N -u ntp:ntp
+ExecStart=/usr/sbin/ntpd -g -N -u ntp:ntp -p /run/ntpd.pid
 # Specifying -g on the command line allows ntpd to make large adjustments to
 # the clock on boot.  However, if Restart=yes is set, a malicious (or broken)
 # server could send the incorrect time, trip the panic threshold, and when

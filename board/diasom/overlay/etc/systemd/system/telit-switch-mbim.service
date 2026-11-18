@@ -1,15 +1,18 @@
 [Unit]
-Description=Switch Telit modem to MBIM mode (AT#USBCFG=7)
-After=sys-subsystem-usb.devices telit-modem-reset.service dev-ttyUSB2.device
+Description=Switch Telit modem to MBIM mode (AT#USBCFG=7) and init GNSS
 BindsTo=dev-ttyUSB2.device
-Before=ModemManager.service
-Wants=sys-subsystem-usb.devices dev-ttyUSB2.device
+After=dev-ttyUSB2.device telit-modem-reset.service
+Before=ModemManager.service gpsd.service
+Wants=ModemManager.service gpsd.service
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh -c "/usr/bin/minicom -o -D /dev/ttyUSB2 -S /opt/taipit/nevav02/misc/minicom_script || true"
+Environment=TERM=vt100
+ExecStart=/bin/sh -c '/usr/bin/minicom -o -D /dev/ttyUSB2 -S /opt/taipit/nevav02/misc/minicom_script -C /tmp/minicom.log'
 TimeoutStartSec=30
+Restart=on-failure
+RestartSec=5
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=dev-ttyUSB2.device

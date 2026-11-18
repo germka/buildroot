@@ -1,0 +1,8 @@
+# Создаём симлинк /dev/gps0 на NMEA-порт Telit LE910C1-EU (интерфейс 02 = ttyUSB0)
+ACTION=="add|change", SUBSYSTEM=="tty", ENV{ID_VENDOR_ID}=="1bc7", ENV{ID_MODEL_ID}=="1252", ENV{ID_USB_INTERFACE_NUM}=="02", SYMLINK+="gps0", TAG+="systemd"
+
+# Запрещаем ModemManager трогать NMEA-порт /dev/ttyUSB0
+ACTION=="add|change|move|bind", SUBSYSTEM=="tty", ENV{ID_VENDOR_ID}=="1bc7", ENV{ID_MODEL_ID}=="1252", ENV{ID_USB_INTERFACE_NUM}=="02", ENV{ID_MM_PORT_IGNORE}="1"
+
+# Выдаём права на /dev/pps0 для пользователя ntp
+KERNEL=="pps[0-9]*", MODE="0660", GROUP="ntp"

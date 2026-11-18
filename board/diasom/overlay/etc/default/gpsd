@@ -3,6 +3,6 @@
 # change the options.
 START_DAEMON="true"
 GPSD_OPTIONS="-n"
-DEVICES="/dev/gps0 /dev/pps2"
+DEVICES="/dev/gps0"
 USBAUTO="false"
 GPSD_SOCKET="/var/run/gpsd.sock"
