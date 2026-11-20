@@ -1,0 +1,4 @@
+enable uspd2-ltel-monitor@.service cdc-wdm0 cdc-wdm1
+
+ignore uspd2-ltel-monitor@cdc-wdm0.service
+ignore uspd2-ltel-monitor@cdc-wdm1.service

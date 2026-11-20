@@ -18,3 +18,5 @@ StandardOutput=journal
 StandardError=journal
 
 [Install]
+RequiredBy=uspd.target
+DefaultInstance=%p%i

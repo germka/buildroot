@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Управление светодиодом WiFi по состоянию интерфейса wlan0
+IFACE="$1"
+ACTION="$2"
+LEDR="1"
+LEDG="2"
+
+[ "$IFACE" = "wlan0" ] || exit 0
+
+# Ждём готовности i2c-драйвера (pipe может появиться позже)
+for i in $(seq 1 10); do
+    [ -p /tmp/i2c-drv-pipe ] && break
+    sleep 1
+done
+
+case "$ACTION" in
+    up)
+        # Линк поднят, но ещё не факт, что ассоциирован
+        echo "${LEDG}=1" > /tmp/i2c-drv-pipe
+        echo "${LEDR}=0" > /tmp/i2c-drv-pipe
+        ;;
+    down)
+        echo "${LEDG}=0" > /tmp/i2c-drv-pipe
+        echo "${LEDR}=1" > /tmp/i2c-drv-pipe
+        ;;
+    connectivity-change)
+        # NM 1.20+ присылает это при смене состояния подключения
+        state=$(nmcli -t -f GENERAL.STATE device show wlan0 | cut -d: -f2)
+        case "$state" in
+            *connected*)
+                echo "${LEDG}=1" > /tmp/i2c-drv-pipe
+                echo "${LEDR}=0" > /tmp/i2c-drv-pipe
+                ;;
+            *)
+                echo "${LEDG}=0" > /tmp/i2c-drv-pipe
+                echo "${LEDR}=1" > /tmp/i2c-drv-pipe
+                ;;
+        esac
+        ;;
+esac
+
+exit 0
