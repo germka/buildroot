@@ -1,0 +1,10 @@
+[Unit]
+Description=Run SQLite Backup every 5 minutes
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=30min
+AccuracySec=10s
+
+[Install]
+WantedBy=timers.target

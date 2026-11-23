@@ -1,0 +1,13 @@
+[Unit]
+Description=SQLite Database Hot Backup Service
+After=local-fs.target
+ConditionPathExists=/dev/mmcblk1
+RequiresMountsFor=/rum/media/data
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/sqlite-backup.sh
+User=root
+Group=root
+Nice=19
+IOSchedulingClass=idle
