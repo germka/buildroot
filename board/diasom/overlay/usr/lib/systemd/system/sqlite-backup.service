@@ -6,7 +6,7 @@ RequiresMountsFor=/rum/media/data
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/sqlite-backup.sh
+ExecStart=/opt/taipit/nevav02/misc/sqlite_backup.sh
 User=root
 Group=root
 Nice=19

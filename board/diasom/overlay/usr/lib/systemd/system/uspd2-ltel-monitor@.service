@@ -3,6 +3,8 @@ Description=LTE modem %i monitor service
 StopWhenUnneeded=yes
 RefuseManualStart=yes
 #RefuseManualStop=yes
+BindsTo=dev-ttyUSB2.device
+After=telit-switch-mbim.service
 
 [Service]
 Type=simple
