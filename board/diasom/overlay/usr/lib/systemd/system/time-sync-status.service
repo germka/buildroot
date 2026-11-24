@@ -15,6 +15,3 @@ ExecStop=/bin/sh /opt/taipit/nevav02/misc/time_sync_offset.sh
 TimeoutStartSec=30
 StandardOutput=journal
 StandardError=journal
-
-[Install]
-WantedBy=uspd.target

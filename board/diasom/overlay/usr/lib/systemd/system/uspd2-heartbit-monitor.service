@@ -1,7 +1,6 @@
 [Unit]
 Description=LED heartbit handler service (USPD core)
 Conflicts=uspd2-error-monitor.service
-After=opt-taipit.mount
 Before=uspd2-error-monitor.service
 Requires=uspd.target
 RefuseManualStop=yes
@@ -11,11 +10,8 @@ Type=simple
 User=root
 Group=root
 
-# TODO: echo 2=1 > /tmp/i2c-drv-pipe
-# ExecStartPre=sh -c "echo $$(find /sys/class/net/wlan0/phy80211/ -type d -name rfkill* -printf "%%f\n") > /sys/class/leds/supv\:\:led4/trigger"
-
-ExecStart=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -rl ACT"
-ExecStop=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -l ACT"
+ExecStart=sleep infinity
+ExecStop=sh -c "/opt/taipit/nevav02/misc/led_handler.sh -rl ACT"
 # Send stop error event
 ExecStartPre=/opt/taipit/nevav02/misc/uspd_event.sh -c 103 -w
 # Send start error event
@@ -28,5 +24,4 @@ StandardOutput=journal
 StandardError=journal
 
 [Install]
-#RequiredBy=uspd.target
 WantedBy=multi-user.target

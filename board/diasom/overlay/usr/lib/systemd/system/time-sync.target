@@ -13,3 +13,6 @@ Documentation=man:systemd.special(7)
 RefuseManualStart=yes
 After=time-set.target
 Wants=time-set.target
+
+[Install]
+WantedBy=multi-user.target
